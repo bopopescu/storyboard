@@ -14,20 +14,26 @@
 	<li style="float:right;">
     <a href="/r/add/{{tag.slug}}">Add</a>
   </li>
+  {%else%}
+  <li style="float:right;">
+    <a href="/r/add/">Add</a>
+  </li>
 	{% endif %}
 </ul>
 
-<div class="main">
+{% load filter %}
 
-<!-- {% load filter %} -->
+{% if threads.paginator.count > 0 %}
+<div class="main">
 		{% if threads.object_list %}
 		<ul class="thread-list">
 			{% for thread in threads.object_list %}
 			<li>
-			<a class="avatar" href="/member/{{ thread.author.username }}"><img src="{{thread.author.email|gravatar }}"></a>
+			<a class="avatar" href="/member/{{ thread.author.username }}" title="{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}"><img src="{{thread.author.email|gravatar }}"></a>
 			<span class="post-meta">
-				<a href="/member/{{ thread.author.username }}" class="author">{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}</a>  -  <a class="stamp" href="/r/{{thread.key}}" title="{{thread.updated|date:"Y-m-d H:i:s"}}"> {{thread.updated|timesince}} ago</a>  -  <a href="/r/tag/{{thread.tag.slug}}" class="node">{{thread.tag.name}}</a></span>
-			<span class="post-title"><a href="/r/{{thread.key}}" class="">{{thread.title}}</a></span>
+				<a href="/member/{{ thread.author.username }}" class="author">{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}</a>  -  <a class="stamp" href="/r/{{thread.key}}" title="{{thread.updated|date:"Y-m-d H:i:s"}}"> {{thread.updated|timesince}} ago</a>  -  <a href="/r/tag/{{thread.tag.slug}}" class="node" rel="popover" data-content="" data-original-title="" title="{{thread.tag.name}}">{{thread.tag.name}}</a></span>
+			<span class="post-title"><a href="/r/{{thread.key}}" class="" title="{{thread.title}}">{{thread.title}}</a></span>
+			<a href="/r/{{thread.key}}#last-reply" class="last-count">{{thread.release}}</a>
 			<span class="stamp"></span>
 			</li>
 			{% endfor %}
@@ -65,15 +71,32 @@
 		
 		{% endif %}
 </div>
+{% endif %}
 
 {% if tags %}
 <div class="main">
 	<div class="table table-striped">
 		{% for tag in tags %}
-			<span><a href="/r/tag/{{tag.slug}}" class="btn">{{tag.name}}</a></span>
+			<a href="/r/tag/{{tag.slug}}" class="thread-tag" title="{{tag.name}}">{{tag.name}}</a>
 		{% endfor %}
 	</div>
 </div>	
+{% endif %}
+
+{% if user.is_authenticated %}
+{% if tag %}
+<div class="main">
+	<form action="/r/add/{{tag.slug}}" method="POST">
+  	{% csrf_token %}
+  <table>
+  {{ form.as_table }}
+  </table>
+  <div class="form-actions">
+  	<button type="submit" class="btn btn-primary">Publish</button>
+  </div>
+  </form>
+</div>
+{% endif %}
 {% endif %}
 	
 {% endblock %}

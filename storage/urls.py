@@ -10,6 +10,7 @@ Copyright (c) 2012 Close To U. All rights reserved.
 from django.conf.urls.defaults import *
 urlpatterns = patterns('storage.views',
             (r'^$','photos'),
+            (r'^ajax_upload$','ajax_upload'),
             (r'^upload$','upload'),
             (r'^(?P<key>\d+)$','view'),
             (r'^raw/(?P<key>\d+).*$','raw'),

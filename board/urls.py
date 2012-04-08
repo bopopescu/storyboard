@@ -10,7 +10,8 @@ Copyright (c) 2012 Close To U. All rights reserved.
 from django.conf.urls.defaults import *
 urlpatterns = patterns('board.views',
             (r'^$','index'),
-            (r'^add/(?P<tag>\w+)$','add'),
+            (r'^add/(?P<tag>\w+)$','add_thread'),
+            (r'^add','add'),
             (r'^tag$','tags'),
             (r'^tag/(?P<tag>\w+)$','index'),
             (r'^(?P<key>\d+)$','view'),

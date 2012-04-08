@@ -53,15 +53,17 @@
 
 <div class="main">
 	{% if user.is_authenticated %}
-	<form action="" method="POST" class="form-horizontal">
+	<form action="" method="POST">
 		{% csrf_token %}
 	<table>
 	{{ form.as_table }}
 	</table>
 	<div class="form-actions">
-		<button type="submit" class="btn btn-primary">Save changes</button>
+		<button type="submit" class="btn btn-primary">Publish</button>
+		<a class="btn" data-toggle="modal" href="#myModal" >UpLoad</a>
 	</div>
 	</form>
+  {% include "board/upload.html" %}
 	{% else %}
 	<div>
 		<a href="/auth/signin?next=/r/{{thread.key}}">Signin</a> and comment

@@ -21,6 +21,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 
+from django.utils import simplejson
+
 from google.appengine.api import files
 from config import GOOGLE_STORAGE,BUCKET,FOLDER
 
@@ -32,15 +34,68 @@ from google.appengine.api import images
 def photos(request):
     query = Storage.objects.all().order_by('-updated')
     return render_to_response('storage/photos.html',{'photos':query},context_instance=RequestContext(request))
+
+def ajax_upload(request):
+    if request.method == 'POST':
+        name = request.META['HTTP_X_FILE_NAME']
+        content_type = request.META['HTTP_CONTENT_TYPE'] or 'application/octet-stream'
+        file_size = request.META['HTTP_X_FILE_SIZE']
+        file_data  = request.raw_post_data
         
+        # logging.info(request.META.keys())
+        # logging.info(name)
+        # logging.info(content_type)
+        # logging.info(file_size)
+        
+        if file_size>0 and file_data:
+            now = datetime.datetime.now()
+
+            file_ext_pos = name.rfind('.')
+            file_name_len = len(name)
+
+            if not (content_type == 'image/jpeg' or content_type == 'image/png' or content_type == 'image/gif'):
+                return
+            if file_ext_pos<=0 and file_ext_pos>=file_name_len:
+                return
+            file_ext = name[file_ext_pos-file_name_len:]        		
+            file_name = 'uploads/ohbug/photo/%s%s' % (now.strftime('%Y-%m/%d-%H%M%S-%f'),file_ext)
+            file_path = '/%s/%s/%s' % (GOOGLE_STORAGE,BUCKET,file_name)
+            #logging.info(file_path)
+            
+            write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
+            with files.open(write_path, 'a') as fp:
+                fp.write(file_data)
+            files.finalize(write_path)
+            s = Storage()
+            s.storage  = GOOGLE_STORAGE
+            s.bucket  = BUCKET
+            s.path = file_name
+            s.mime = content_type
+            s.size = len(file_data)
+            s.md5 = hashlib.md5(file_data).hexdigest()
+            s.name = name
+            s.author = request.user
+            s.save()
+            
+            HTTP_HOST = request.META['HTTP_HOST']
+            to_json = {
+                'origin': 'http://%s/photo/%s' % (HTTP_HOST,s.key) ,
+                'url': 'http://%s/photo/raw/%s.%s' % (HTTP_HOST,s.key,s.name)
+            }
+            return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
+    else:
+        logging.info('get')
+    return HttpResponse('hello')
+      
 def upload(request):
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             if request.FILES.has_key('images'):
                 name = request.FILES['images'].name
-                content_type = request.FILES['images'].content_type or 'text/plain'
-
+                content_type = request.FILES['images'].content_type or 'application/octet-stream'#'text/plain'
+                file_data = request.FILES['images'].read()
+                
                 now = datetime.datetime.now()
 
                 file_ext_pos = name.rfind('.')
@@ -53,8 +108,8 @@ def upload(request):
                 file_ext = name[file_ext_pos-file_name_len:]        		
                 file_name = 'uploads/ohbug/photo/%s%s' % (now.strftime('%Y-%m/%d-%H%M%S-%f'),file_ext)
                 file_path = '/%s/%s/%s' % (GOOGLE_STORAGE,BUCKET,file_name)
-                logging.info(file_path)
-                file_data = request.FILES['images'].read()
+                #logging.info(file_path)
+                
                 write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
                 with files.open(write_path, 'a') as fp:
                     fp.write(file_data)

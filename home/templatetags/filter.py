@@ -102,5 +102,12 @@ def imgize(text):
 				words[i] = mark_safe(word)
 		else:
 			words[i] = escape(word)
+		imgs = re.findall('(http://.*/photo/(\d+)\?preview=true)\s?', word)
+		if len(imgs) > 0:
+		    for img in imgs:
+		        img_url = img[0].replace('/photo/'+img[1],'/photo/raw/'+img[1])
+		        word = word.replace(img[0],'<a href="' + img[0] + '" target="_blank" class="imgize-url"><img src="' + img_url + '" class="imgize" border="0" /></a>')
+		        words[i] = mark_safe(word)
+		
 	return mark_safe(u''.join(words))
 imgize.is_safe = True

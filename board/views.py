@@ -28,7 +28,6 @@ def update(request):
     return HttpResponseRedirect('/')
     
 def index(request,tag=None):
-    # logging.info('index')
     if tag:
         tag = Tag.objects.get(slug=tag)
         query = memcache.get('threadswithtag-'+tag.slug)
@@ -97,10 +96,8 @@ def index(request,tag=None):
         else:
             updated_tags = Tag.objects.all().order_by('-updated')[:10]
         memcache.add('updated_tags', updated_tags, 3600) 
-
-    values = {'threads':threads,'tags':tags,'updated_tags':updated_tags,'tag':tag}
-    # logging.info('render_to_response')
-    # logging.info(request.mobile)
+    form = ThreadForm()
+    values = {'threads':threads,'tags':tags,'updated_tags':updated_tags,'tag':tag,'form':form}
     return render_to_response('board/threads.html',values,context_instance=RequestContext(request))
 
 def view(request,key):
@@ -124,11 +121,12 @@ def view(request,key):
     else:
         form = CommentForm()
     updated_tags = memcache.get('updated_tags')
+    tag = thread.tag
     try:
         f = Favorite.objects.get(author=request.user,thread=thread)
     except Exception:
         f = None
-    values = {'thread':thread,'comments':comments,'favorite':f,'form':form,'updated_tags':updated_tags}
+    values = {'thread':thread,'comments':comments,'favorite':f,'form':form,'tag':tag,'updated_tags':updated_tags}
     return render_to_response('board/view.html',values,context_instance=RequestContext(request))
 
 @login_required
@@ -151,8 +149,13 @@ def tags(request):
     tags = Tag.objects.all().order_by('-updated')
     return render_to_response('board/threads.html',{'tags':tags},context_instance=RequestContext(request))
 
+@login_required
+def add(request):
+    tags = Tag.objects.all().order_by('-updated')
+    return render_to_response('board/add.html',{'tags':tags},context_instance=RequestContext(request))
+
 @login_required    
-def add(request,tag=None):
+def add_thread(request,tag=None):
     if tag:
         tag = Tag.objects.get(slug=tag)
         query = Thread.objects.all().order_by('-updated').filter(tag=tag)
@@ -169,10 +172,10 @@ def add(request,tag=None):
             obj.save()
             memcache.delete('threadswithtag')
             memcache.delete('threads')
-            return HttpResponseRedirect('/r')
+            return HttpResponseRedirect('/r/'+str(obj.key))
     else:
         form = ThreadForm()
-    return render_to_response('board/add.html',{'tag':tag,'form':form,'threads':query},context_instance=RequestContext(request))
+    return render_to_response('board/add_thread.html',{'tag':tag,'form':form,'threads':query},context_instance=RequestContext(request))
 
 @login_required
 def delete(request):

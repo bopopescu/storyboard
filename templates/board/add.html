@@ -5,25 +5,28 @@
     <a href="/">Home</a> <span class="divider">/</span>
   </li>
   <li>
-    <a href="/r">Board</a> <span class="divider">/</span>
+    <a href="/r">Board</a> {% if tag %}<span class="divider">/</span>{% endif %}
   </li>
+	{% if tag %}
 	<li>
-    <a href="/r/tag/{{tag.slug}}">{{ tag.name }}</a> <span class="divider">/</span>
+    <a href="/r/tag/{{tag.slug}}">{{ tag.name }}</a>
   </li>
-  <li class="active">
-    <a href="/r/add/{{tag.slug}}">New Thread</a>
+	<li style="float:right;">
+    <a href="/r/add/{{tag.slug}}">Add</a>
   </li>
+	{% endif %}
 </ul>
 
+
+{% if tags %}
 <div class="main">
-<form action="" method="POST">
-	{% csrf_token %}
-<table>
-{{ form.as_table }}
-</table>
-<div class="form-actions">
-	<button type="submit" class="btn btn-primary">Publish</button>
-</div>
-</form>
-</div>
+	<div class="table table-striped">
+		{% for tag in tags %}
+			<a href="/r/add/{{tag.slug}}" class="thread-tag" title="{{tag.name}}">{{tag.name}}</a>
+		{% endfor %}
+	</div>
+</div>	
+{% endif %}
+
+	
 {% endblock %}

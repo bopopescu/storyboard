@@ -20,8 +20,12 @@
 			<dd>{{ image.origin.name }}</dd>
 		</dl>
 		<dl>
-			<dt>Uploaded</dt>
+			<dt>Uploaded At</dt>
 			<dd>{{ image.origin.created|date:"Y-m-d H:i:s" }}</dd>
+		</dl>
+		<dl>
+			<dt>Uploaded By</dt>
+			<dd><a href="/member/{{ image.origin.author.username }}">{% if user.get_full_name %}{{user.get_full_name}} {% else %} {{ user.username }} {% endif %}</a></dd>
 		</dl>
     <input value="{{image.url}}" style="width:100%;" type="hidden"/>
   </div>
