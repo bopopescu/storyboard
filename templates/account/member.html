@@ -22,7 +22,8 @@
 	</div>
 	<ul>
 	  {% if member.profile.location  %}
-		<li><a class="" data-toggle="modal" href="https://www.google.com/maps?q={{member.profile.location}}#myModal" target="_blank">{{member.profile.location}}</a></li>
+	  <!-- class="" data-toggle="modal"  -->
+		<li><a href="https://www.google.com/maps?q={{member.profile.location}}#mylocation" target="_blank">{{member.profile.location}}</a></li>
 		{% endif %}
 		{% if member.profile.twitter %}
 		<li><a href="https://twitter.com/{{member.profile.twitter}}" target="_blank">@{{member.profile.twitter}}</a></li>

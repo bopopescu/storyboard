@@ -17,6 +17,8 @@ from django.contrib import auth
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.http import HttpResponseNotModified
+from django.http import HttpResponseNotFound
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -35,6 +37,7 @@ def photos(request):
     query = Storage.objects.all().order_by('-updated')
     return render_to_response('storage/photos.html',{'photos':query},context_instance=RequestContext(request))
 
+@login_required
 def ajax_upload(request):
     if request.method == 'POST':
         name = request.META['HTTP_X_FILE_NAME']
@@ -84,9 +87,10 @@ def ajax_upload(request):
             }
             return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
     else:
-        logging.info('get')
-    return HttpResponse('hello')
-      
+        #return HttpResponse('ajax_upload: POST method required.')
+        return HttpResponseRedirect('/photo/upload')
+
+@login_required      
 def upload(request):
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
@@ -154,40 +158,64 @@ def read_gs(read_path):
     except Exception,e:
         pass
     return image_data
-            
+
+def cache_response(new_image, mime):
+    response = HttpResponse(new_image, mime)
+    format_str = '%a, %d %b %Y %H:%M:%S GMT'
+    expires_date = datetime.datetime.utcnow() + datetime.timedelta(365)
+    expires_str = expires_date.strftime(format_str)
+    last_modified_date = datetime.datetime.utcnow()
+    last_modified_str = expires_date.strftime(format_str)
+    response['Expires'] = expires_str #eg:'Sun, 08 Apr 2013 11:11:02 GMT'
+    response["Last-Modified"] = last_modified_str #for 'If-Modified-Since'
+    response['Cache-Control'] = 'max-age=172800'
+    #response['Content-Disposition'] = 'attachment; filename=%s' % s.name
+    #response["ETag"] = ''
+    return  response
+              
 def raw(request,key=None):
+    if request.META.has_key('HTTP_IF_MODIFIED_SINCE'):
+        return HttpResponseNotModified()
+    #request.META.get("HTTP_IF_NONE_MATCH", None)    
     s = get_object_or_404(Storage,pk=key)
     read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
-    #logging.info(read_path)
     image_data = read_gs(read_path)
-    return HttpResponse(image_data, s.mime)
+    if image_data:
+        return cache_response(image_data, s.mime)
+    else:
+        return HttpResponseNotFound()
     
 def thumbnail(request,key=None):
+    if request.META.has_key('HTTP_IF_MODIFIED_SINCE'):
+        return HttpResponseNotModified()
     s = get_object_or_404(Storage,pk=key)
     read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
     image_data = read_gs(read_path)
-    MIN_SIZE = 100
-    image = images.Image(image_data)
-    width = image.width
-    height = image.height
-    if width>height:
-        rate = width*1.0/height
+    if image_data:
+        MIN_SIZE = 100
+        image = images.Image(image_data)
+        width = image.width
+        height = image.height
+        if width>height:
+            rate = width*1.0/height
+        else:
+            rate = height*1.0/width
+        size = int(MIN_SIZE*rate+1)
+        new_image = images.resize(image_data, width=size, height=size, output_encoding=images.PNG)      
+        image = images.Image(new_image)
+        right_x = round(MIN_SIZE*1.0/image.width,5)
+        if right_x>1:
+            right_x = 1.0
+        else:
+            left_x = (1- right_x)/2
+            right_x = right_x + left_x
+        bottom_y = round(MIN_SIZE*1.0/image.height,5)
+        if bottom_y >1:
+            bottom_y = 1.0
+        else:
+            top_y = (1-bottom_y)/2
+            bottom_y = bottom_y + top_y
+        new_image = images.crop(new_image, left_x, top_y, right_x, bottom_y, output_encoding=images.PNG)
+        return cache_response(new_image, s.mime)
     else:
-        rate = height*1.0/width
-    size = int(MIN_SIZE*rate+1)
-    new_image = images.resize(image_data, width=size, height=size, output_encoding=images.PNG)      
-    image = images.Image(new_image)
-    right_x = round(MIN_SIZE*1.0/image.width,5)
-    if right_x>1:
-        right_x = 1.0
-    else:
-        left_x = (1- right_x)/2
-        right_x = right_x + left_x
-    bottom_y = round(MIN_SIZE*1.0/image.height,5)
-    if bottom_y >1:
-        bottom_y = 1.0
-    else:
-        top_y = (1-bottom_y)/2
-        bottom_y = bottom_y + top_y
-    new_image = images.crop(new_image, left_x, top_y, right_x, bottom_y, output_encoding=images.PNG)
-    return HttpResponse(new_image, s.mime)
+        return HttpResponseNotFound()
