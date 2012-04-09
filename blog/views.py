@@ -38,7 +38,8 @@ class MineEntryListView(ListView):
 class EntryListView(ListView):
     context_object_name = "entries"
     template_name = "blog/blogs.html"
-
+    paginate_by = 10
+    #page = 1
     def get_queryset(self):
         return Entry.objects.all().filter(status='0').order_by('-updated')
     # template_name = "blog/blogs.html"

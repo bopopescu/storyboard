@@ -46,6 +46,37 @@ html body .container{
   padding: 20px;
 }
 
+/**/
+ul.social{
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+ul.social a{
+  color: #777;
+}
+
+ul.social li{
+  background-image: none;
+  background-repeat: no-repeat;
+  padding-left: 20px;
+  line-height: 16px;
+  margin: 5px 0;
+}
+
+ul.social li.maps{
+  background-image: url("/static/img/icon-google-maps.png");
+}
+
+ul.social li.twitter{
+  background-image: url("/static/img/icon-twitter.png");
+}
+
+ul.social li.github{
+  background-image: url("/static/img/icon-github.png");
+}
+
 /*photos*/
 .photos ul{
 	margin:0;
@@ -179,6 +210,19 @@ div.page-header {
   color: #888888;
   font-size: 14px;
   margin: 0 5px;
+}
+.modal-body .thread-meta{
+  margin-bottom: 10px;
+  margin-top: -10px;
+  padding-bottom: 10px;
+  border-top: none;
+  border-bottom: 1px dashed #E3E3E3;
+}
+.widget .widget-header{
+  font-size: 16px;
+  font-weight: bold;
+  padding: 5px;
+  border-bottom: 1px solid #E3E3E3;
 }
 .widget .thread-tag{
   font-size: 13px;

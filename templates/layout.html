@@ -101,17 +101,27 @@
 						<!-- widget end -->
 						{% if updated_tags %}
 						<div class="widget">
+						  <div class="widget-header">
+						    <span>Latest Tag</span>
+						  </div>
+						  <div>
 							{% for tag in updated_tags %}
 								<a href="/r/tag/{{tag.slug}}" class="thread-tag" title="{{tag.name}}">{{tag.name}}</a>
 							{% endfor %}
+							</div>
 						</div>
 						{% endif %}
 						
 						{% if tag and tag.meta %}
 						<div class="widget">
+						  <div class="widget-header">
+						    <span>Meta</span>
+						  </div>
+						  <div>
 						  {% autoescape off %}
 						  {{tag.meta}}
 						  {% endautoescape %}
+						  </div>
 						</div>
 						{% endif %}
 						<div class="widget">

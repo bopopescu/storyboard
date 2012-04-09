@@ -20,16 +20,16 @@
   	</dl>
   	{% endif %}
 	</div>
-	<ul>
+	<ul class="social">
 	  {% if member.profile.location  %}
 	  <!-- class="" data-toggle="modal"  -->
-		<li><a href="https://www.google.com/maps?q={{member.profile.location}}#mylocation" target="_blank">{{member.profile.location}}</a></li>
+		<li class="maps"><a href="https://www.google.com/maps?q={{member.profile.location}}#mylocation" target="_blank">{{member.profile.location}}</a></li>
 		{% endif %}
 		{% if member.profile.twitter %}
-		<li><a href="https://twitter.com/{{member.profile.twitter}}" target="_blank">@{{member.profile.twitter}}</a></li>
+		<li class="twitter"><a href="https://twitter.com/{{member.profile.twitter}}" target="_blank">@{{member.profile.twitter}}</a></li>
 		{% endif %}
 		{% if member.profile.github %}
-		<li><a href="https://github.com/{{member.profile.github}}" target="_blank">{{member.profile.github}}</a></li>
+		<li class="github"><a href="https://github.com/{{member.profile.github}}" target="_blank">{{member.profile.github}}</a></li>
 		{% endif %}
 	</ul>
 	
