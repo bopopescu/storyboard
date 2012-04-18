@@ -92,9 +92,9 @@ def index(request,tag=None):
         pass
     else:
         if tags:
-            updated_tags = tags[0:10]
+            updated_tags = tags[0:20]
         else:
-            updated_tags = Tag.objects.all().order_by('-updated')[:10]
+            updated_tags = Tag.objects.all().order_by('-updated')[:20]
         memcache.add('updated_tags', updated_tags, 3600) 
     form = ThreadForm()
     values = {'threads':threads,'tags':tags,'updated_tags':updated_tags,'tag':tag,'form':form}

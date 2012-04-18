@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="main">
+  <header>	
+  	site list
+  </header>
+  <div>
+    <ul>
+    {% for minisite in minisites %}
+      <li><a href="/minisite/{{minisite.slug}}">{{minisite.name}}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

@@ -26,7 +26,7 @@ import markdown
 import datetime
 
 class AboutView(TemplateView):
-    template_name = "about.html"
+    template_name = "home/about.html"
 
 class MineEntryListView(ListView):
     context_object_name = "entries"

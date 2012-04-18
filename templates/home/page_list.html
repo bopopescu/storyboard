@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="main">
+  <header>	
+  	site list
+  </header>
+  <div>
+    <div><a href="/minisite/add/{{minisite.slug}}">Add Page</a></div>
+    <ul>
+    {% for page in pages %}
+      <li>
+        <a href="/{{page.minisite.slug}}/{{page.slug}}" target="_blank">{{page.name}}</a> || <a href="/minisite/{{page.minisite.slug}}/{{page.slug}}/edit">Edit</a>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

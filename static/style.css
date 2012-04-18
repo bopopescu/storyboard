@@ -219,11 +219,21 @@ div.page-header {
   border-bottom: 1px dashed #E3E3E3;
 }
 .widget .widget-header{
-  font-size: 16px;
-  font-weight: bold;
-  padding: 5px;
+  font-size: 14px;
+  padding:0 5px 5px 5px;
+  color: #888;
   border-bottom: 1px solid #E3E3E3;
 }
+
+.widget .widget-header .widget-title{
+  
+}
+
+.widget .widget-header .widget-tagline{
+  float: right;
+  color: #888;
+}
+
 .widget .thread-tag{
   font-size: 13px;
 	line-height: 13px;

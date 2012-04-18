@@ -37,4 +37,10 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
+    (r'^minisite/add/(\w+)', 'home.views.add_page'),
+    (r'^minisite/add', 'home.views.add_minisite'),
+    (r'^minisite/(\w+)/(.*)/edit', 'home.views.edit_page'),
+    (r'^minisite/(\w+)', 'home.views.page'),
+    (r'^minisite/', 'home.views.minisite'),
+    (r'^(.*)', 'home.views.router'),
 )

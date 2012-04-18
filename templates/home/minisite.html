@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% load filter %}
+{% block body %}
+<ul class="breadcrumb">
+  <li>
+    <a href="/{{minisite.slug}}">{{minisite.name}}</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/{{minisite.slug}}/{{page.slug}}">{{page.name}}</a>
+  </li>
+</ul>
+
+<div class="main">
+  <div>
+    {%comment%}
+    {{page.content|imgize|urlize|linebreaks}}
+    {%endcomment%}
+    {% autoescape off %}
+  	{{page.text_html}}
+  	{% endautoescape %}
+  </div>
+</div>
+
+<div class="main">
+  <div>
+    /{{minisite.slug}}/{{page.slug}}
+  </div>
+</div>
+{% endblock %}

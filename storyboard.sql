@@ -158,7 +158,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `content_type_id` (`content_type_id`,`codename`),
   KEY `auth_permission_e4470c6e` (`content_type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +167,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add permission',1,'add_permission'),(2,'Can change permission',1,'change_permission'),(3,'Can delete permission',1,'delete_permission'),(4,'Can add group',2,'add_group'),(5,'Can change group',2,'change_group'),(6,'Can delete group',2,'delete_group'),(7,'Can add user',3,'add_user'),(8,'Can change user',3,'change_user'),(9,'Can delete user',3,'delete_user'),(10,'Can add message',4,'add_message'),(11,'Can change message',4,'change_message'),(12,'Can delete message',4,'delete_message'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add log entry',7,'add_logentry'),(20,'Can change log entry',7,'change_logentry'),(21,'Can delete log entry',7,'delete_logentry'),(22,'Can add account',8,'add_account'),(23,'Can change account',8,'change_account'),(24,'Can delete account',8,'delete_account'),(25,'Can add note',9,'add_note'),(26,'Can change note',9,'change_note'),(27,'Can delete note',9,'delete_note'),(28,'Can add tag',10,'add_tag'),(29,'Can change tag',10,'change_tag'),(30,'Can delete tag',10,'delete_tag'),(31,'Can add thread',11,'add_thread'),(32,'Can change thread',11,'change_thread'),(33,'Can delete thread',11,'delete_thread'),(34,'Can add favorite',12,'add_favorite'),(35,'Can change favorite',12,'change_favorite'),(36,'Can delete favorite',12,'delete_favorite'),(37,'Can add entry',13,'add_entry'),(38,'Can change entry',13,'change_entry'),(39,'Can delete entry',13,'delete_entry'),(40,'Can add tag',14,'add_tag'),(41,'Can change tag',14,'change_tag'),(42,'Can delete tag',14,'delete_tag'),(43,'Can add relationship',15,'add_relationship'),(44,'Can change relationship',15,'change_relationship'),(45,'Can delete relationship',15,'delete_relationship'),(46,'Can add storage',16,'add_storage'),(47,'Can change storage',16,'change_storage'),(48,'Can delete storage',16,'delete_storage');
+INSERT INTO `auth_permission` VALUES (1,'Can add permission',1,'add_permission'),(2,'Can change permission',1,'change_permission'),(3,'Can delete permission',1,'delete_permission'),(4,'Can add group',2,'add_group'),(5,'Can change group',2,'change_group'),(6,'Can delete group',2,'delete_group'),(7,'Can add user',3,'add_user'),(8,'Can change user',3,'change_user'),(9,'Can delete user',3,'delete_user'),(10,'Can add message',4,'add_message'),(11,'Can change message',4,'change_message'),(12,'Can delete message',4,'delete_message'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add log entry',7,'add_logentry'),(20,'Can change log entry',7,'change_logentry'),(21,'Can delete log entry',7,'delete_logentry'),(22,'Can add account',8,'add_account'),(23,'Can change account',8,'change_account'),(24,'Can delete account',8,'delete_account'),(25,'Can add minisite',9,'add_minisite'),(26,'Can change minisite',9,'change_minisite'),(27,'Can delete minisite',9,'delete_minisite'),(28,'Can add page',10,'add_page'),(29,'Can change page',10,'change_page'),(30,'Can delete page',10,'delete_page'),(31,'Can add note',11,'add_note'),(32,'Can change note',11,'change_note'),(33,'Can delete note',11,'delete_note'),(34,'Can add tag',12,'add_tag'),(35,'Can change tag',12,'change_tag'),(36,'Can delete tag',12,'delete_tag'),(37,'Can add thread',13,'add_thread'),(38,'Can change thread',13,'change_thread'),(39,'Can delete thread',13,'delete_thread'),(40,'Can add favorite',14,'add_favorite'),(41,'Can change favorite',14,'change_favorite'),(42,'Can delete favorite',14,'delete_favorite'),(43,'Can add entry',15,'add_entry'),(44,'Can change entry',15,'change_entry'),(45,'Can delete entry',15,'delete_entry'),(46,'Can add tag',16,'add_tag'),(47,'Can change tag',16,'change_tag'),(48,'Can delete tag',16,'delete_tag'),(49,'Can add relationship',17,'add_relationship'),(50,'Can change relationship',17,'change_relationship'),(51,'Can delete relationship',17,'delete_relationship'),(52,'Can add storage',18,'add_storage'),(53,'Can change storage',18,'change_storage'),(54,'Can delete storage',18,'delete_storage');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +192,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,6 +201,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
+INSERT INTO `auth_user` VALUES (1,'darcy','','','darcy@closetou.com','sha1$d8346$60d4aadfae79d50907a2fd87dee7028cb6b8a79f',1,1,1,'2012-04-12 15:35:25','2012-04-12 10:35:07');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -493,7 +494,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -502,7 +503,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'permission','auth','permission'),(2,'group','auth','group'),(3,'user','auth','user'),(4,'message','auth','message'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(7,'log entry','admin','logentry'),(8,'account','account','account'),(9,'note','note','note'),(10,'tag','board','tag'),(11,'thread','board','thread'),(12,'favorite','board','favorite'),(13,'entry','blog','entry'),(14,'tag','blog','tag'),(15,'relationship','blog','relationship'),(16,'storage','storage','storage');
+INSERT INTO `django_content_type` VALUES (1,'permission','auth','permission'),(2,'group','auth','group'),(3,'user','auth','user'),(4,'message','auth','message'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(7,'log entry','admin','logentry'),(8,'account','account','account'),(9,'minisite','home','minisite'),(10,'page','home','page'),(11,'note','note','note'),(12,'tag','board','tag'),(13,'thread','board','thread'),(14,'favorite','board','favorite'),(15,'entry','blog','entry'),(16,'tag','blog','tag'),(17,'relationship','blog','relationship'),(18,'storage','storage','storage');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -528,7 +529,79 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('ab62cdb753f514313a65bfb60677366b','MzZlNzliMGQzNDM4YTMxZmJkMGI2MWM0OGE0MDE3Njc0OGM1MTYyMDqAAn1xAChVEl9hdXRoX3Vz\nZXJfYmFja2VuZHEBVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEC\nVQ1fYXV0aF91c2VyX2lkcQOKAQF1Lg==\n','2012-04-26 15:35:25');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `home_minisite`
+--
+
+DROP TABLE IF EXISTS `home_minisite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `home_minisite` (
+  `key` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) NOT NULL,
+  `slug` varchar(128) NOT NULL,
+  `meta` longtext NOT NULL,
+  `description` longtext NOT NULL,
+  `author_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  PRIMARY KEY (`key`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `home_minisite_cc846901` (`author_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `home_minisite`
+--
+
+LOCK TABLES `home_minisite` WRITE;
+/*!40000 ALTER TABLE `home_minisite` DISABLE KEYS */;
+INSERT INTO `home_minisite` VALUES (1,'add','bbb','','',1,'2012-04-12 15:35:39','2012-04-12 15:35:39'),(2,'CN','cn','','',1,'2012-04-12 15:44:32','2012-04-12 15:44:32');
+/*!40000 ALTER TABLE `home_minisite` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `home_page`
+--
+
+DROP TABLE IF EXISTS `home_page`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `home_page` (
+  `key` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) NOT NULL,
+  `slug` varchar(128) NOT NULL,
+  `mode` varchar(1) NOT NULL,
+  `mime` varchar(64) NOT NULL,
+  `format` varchar(1) NOT NULL,
+  `text` longtext NOT NULL,
+  `script` longtext NOT NULL,
+  `style` longtext NOT NULL,
+  `text_html` longtext NOT NULL,
+  `minisite_id` int(11) NOT NULL,
+  `author_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  PRIMARY KEY (`key`),
+  UNIQUE KEY `slug` (`slug`,`minisite_id`),
+  KEY `home_page_d40053a8` (`minisite_id`),
+  KEY `home_page_cc846901` (`author_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `home_page`
+--
+
+LOCK TABLES `home_page` WRITE;
+/*!40000 ALTER TABLE `home_page` DISABLE KEYS */;
+INSERT INTO `home_page` VALUES (1,'ab','','0','text/html;charset=utf-8','2','fasdf\r\nasdf\r\nasdf\r\nasdf\r\naaa\r\nab\r\nc','','','',1,1,'2012-04-12 15:36:20','2012-04-12 15:39:17'),(2,'ab','badedg','0','text/html;charset=utf-8','2','d','','','',1,1,'2012-04-12 15:40:11','2012-04-12 15:40:11'),(3,'sad','','0','text/html;charset=utf-8','2','#abcdefg#','','','',2,1,'2012-04-12 15:44:39','2012-04-12 15:45:28');
+/*!40000 ALTER TABLE `home_page` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -605,4 +678,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-02 22:58:45
+-- Dump completed on 2012-04-12 23:48:40
