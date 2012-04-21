@@ -6,10 +6,14 @@ threadsafe: true
 
 default_expiration: "21d"
 
-handlers:
-- url: /favicon\.ico
-  static_files: static/favicon.ico
-  upload: favicon\.ico
+handlers:  
+- url: /(robots.txt|favicon.ico)
+  static_files: static/\1
+  upload: static/(robots.txt|favicon.ico)
+
+# - url: /(apple-touch-icon.png|apple-touch-icon-precomposed.png)
+#   static_files: static/\1
+#   upload: static/(apple-touch-icon.png|apple-touch-icon-precomposed.png)
 
 - url: /static/(.*?)-v(.*).css
   static_files: static/\1.css

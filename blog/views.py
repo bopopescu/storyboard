@@ -22,6 +22,8 @@ from django.shortcuts import get_object_or_404
 from models import *
 from forms import *
 
+from common.filter import *
+
 import markdown
 import datetime
 
@@ -78,7 +80,7 @@ def add(request):
             obj = form.save(commit=False)
             obj.author = request.user
             obj.published = datetime.datetime.now()
-            obj.text_html = markdown.markdown(obj.text, ['extra','codehilite','toc','nl2br'])
+            obj.text_html = markdown.markdown(html_escape(obj.text), ['extra','codehilite','toc','nl2br'])
             obj.save()
             tagstr = form.cleaned_data['tags']
             tags = tagstr.split(',')
@@ -111,7 +113,7 @@ def edit(request,key):
             obj = form.save(commit=False)
             #obj.author = request.user
             obj.published = obj.created
-            obj.text_html = markdown.markdown(obj.text, ['extra','codehilite','toc','nl2br'])
+            obj.text_html = markdown.markdown(html_escape(obj.text), ['extra','codehilite','toc','nl2br'])
             obj.save()
             
             tagstr = form.cleaned_data['tags']

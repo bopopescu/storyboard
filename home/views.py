@@ -23,6 +23,7 @@ from django.utils.html import urlize,linebreaks
 from templatetags.filter import imgize
 from models import *
 from forms import *
+from common.filter import *
 import logging
 import markdown
 
@@ -66,7 +67,7 @@ def edit_page(request,minisitepath=None,pagepath=None):
                 return HttpResponseRedirect('/minisite/'+minisite.slug)
         else:
             form = PageForm(instance = page, initial = {'minisite': minisite })
-        return render_to_response('home/add_site.html',{'form': form},context_instance=RequestContext(request))
+        return render_to_response('home/add_page.html',{'form': form},context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
     
@@ -87,7 +88,7 @@ def add_page(request,minisite=None):
                 return HttpResponseRedirect('/minisite/'+minisite.slug)
         else:
             form = PageForm()
-        return render_to_response('home/add_site.html',{'form':form},context_instance=RequestContext(request))
+        return render_to_response('home/add_page.html',{'form':form},context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
       
@@ -121,7 +122,7 @@ def router(request,path=None):
             if page.format == '0':
                 page.text_html = linebreaks(urlize(imgize(page.text)))
             if page.format == '2':
-                page.text_html = markdown.markdown(page.text, ['extra','codehilite','toc','nl2br'])
+                page.text_html = markdown.markdown(html_escape(page.text), ['extra','codehilite','toc','nl2br'])
             values = {'minisite':minisite,'page':page}
         else:
             return HttpResponseRedirect('/%s/'%path)

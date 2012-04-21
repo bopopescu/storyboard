@@ -31,7 +31,7 @@ class Entry(models.Model):
             ('2', 'Draft'),
             ('3', 'Trash'),
         )
-    status = models.CharField(verbose_name='status',max_length=1,default=1,choices=Status_Choices)
+    status = models.CharField(verbose_name='status',max_length=1,default=0,choices=Status_Choices)
     comment_status = models.BooleanField(default=True,verbose_name='comment status')
     ping_ststus = models.BooleanField(default=True,verbose_name='ping status')
     pv = models.IntegerField(default=0,verbose_name='pv')

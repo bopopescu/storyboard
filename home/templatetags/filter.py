@@ -14,6 +14,8 @@ import re
 from django.utils.safestring import SafeData, mark_safe
 from django.utils.encoding import force_unicode
 
+from common.filter import *
+
 register = template.Library()
 # Configuration for urlize() function.
 LEADING_PUNCTUATION  = ['(', '<', '&lt;']
@@ -111,3 +113,15 @@ def imgize(text):
 		
 	return mark_safe(u''.join(words))
 imgize.is_safe = True
+
+@register.filter(name='emoji')
+def emoji(text):
+    return mark_safe(emoji_to_html(text))
+emoji.is_safe = True
+
+@register.filter(name='mention')
+def mention(text):
+    pattern = re.compile(r'@(\w+)\s')
+    text = pattern.sub(r'<a href="/member/\1" title="\1" data-original-title="\1" class="mention">@\1</a> ', text)
+    return mark_safe(text)
+mention.is_safe = True

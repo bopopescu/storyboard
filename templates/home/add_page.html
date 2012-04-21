@@ -5,8 +5,45 @@
   	add page
   </header>
   <div>
-	
+	  <form action="" method="POST">
+    	{% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <div class="form-actions">
+    	<button type="submit" class="btn btn-primary">Save</button>
+    	<a class="btn" data-toggle="modal" href="#preview" >Preview Mode</a>
+    </div>
+    </form>
 
   </div>
 </div>
+
+<div class="modal fade hide" id="preview">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Markdown</h3>
+  </div>
+  <div class="modal-body">
+    <div id="text">
+      <div class="carton container border">
+  			<div id="editor-textarea" class="column">
+  			</div>
+  			<div id="editor-preview" class="column right"></div>
+  		</div>
+		</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<link href="/static/wysiwym.css" rel="stylesheet">
+<link href="/static/editor.css" rel="stylesheet">
+<script src="/static/prettify.js"></script>
+<script src="/static/showdown.js"></script>
+<script src="/static/editor.js"></script>
+<script src="/static/markdown.js"></script>
 {% endblock %}

@@ -1,4 +1,4 @@
-<div class="modal fade hide" id="myModal">
+<div class="modal fade hide" id="uploader">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
     <h3>Upload</h3>
@@ -84,7 +84,7 @@
             $('#id_text').val(to_json['origin']+'?preview=true');
          }
          
-         $('#myModal').modal('hide');
+         $('#uploader').modal('hide');
          //console.log(to_json);
          // $('#progress').html('Progress: 100%');
          //            $('#result').html('<p>The server saw it as:</p><pre>' + evt.target.responseText + '</pre>');
@@ -96,6 +96,5 @@
   </div>
   <div class="modal-footer">
     <a href="#" class="btn" data-dismiss="modal">Close</a>
-    <a href="#" class="btn btn-primary">Insert Photo</a>
   </div>
 </div>

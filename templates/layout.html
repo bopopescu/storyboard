@@ -80,7 +80,7 @@
 		      <!--Sidebar content-->
 					<div class="sidebar">
 						<!-- widget begin -->
-						<div id="user-panel" class="widget">
+						<div id="xuser-panel" class="widget">
 							{% if user.is_authenticated %}
 							<div style="padding:5px;">
 								<!-- {% gravatar_url user.email %} -->
@@ -93,9 +93,13 @@
 							  <a class="btn" href="#">333</a-->
 							</div>
 							{%else%}
-							<div>
-							<a href="/auth/signin">Signin</a> or <a href="/auth/signup">Signup</a>
-							</div>
+							  <div class="widget-header">
+  						    <span>Oh Bug!  - Fun with Programming.</span>
+  						  </div>
+  						  <div align="center" style="padding:10px">
+  						    <a class="btn" href="/auth/signin">Signin</a>
+  						    or <a class="btn" href="/auth/signup">Signup</a>
+  						  </div>
 							{%endif%}
 						</div>
 						<!-- widget end -->
@@ -166,6 +170,7 @@
 	<script>
 	$('.dropdown-toggle').dropdown();
 	$('.stamp').tooltip();
+	$('.mention').tooltip();
 	//$('.node').popover();
 	$('#myCarousel').carousel('cycle');
 	/*$('.carousel').carousel();*/
@@ -182,5 +187,7 @@
 	})();
 	</script>
 	{% endif %}
+	{% block footer %}
+	{% endblock %}
 </body>
 </html>

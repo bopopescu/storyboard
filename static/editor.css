@@ -1,0 +1,111 @@
+#text {
+	height: 400px;
+}
+#text > .carton {
+	height: 100%;
+	background: transparent;
+}
+#text > .carton > .column {
+	position: relative;
+	height: 100%;
+	overflow: auto;
+}
+#text > .carton > .column.right {
+	background: white;
+	-moz-box-shadow: black 30px 0px 20px -30px inset, black -30px 0px 20px -30px inset;
+	-webkit-box-shadow: black 30px 0px 20px -30px inset, black -30px 0px 20px -30px inset;
+	box-shadow: black 30px 0px 20px -30px inset, black -30px 0px 20px -30px inset;
+	background: #262C36;
+	color: white
+}
+#text .editor, #text .preview {
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	margin: 20px;
+	position: absolute;
+	-webkit-overflow-scrolling: touch;	
+}
+#text .editor {
+	margin-top: 68px;
+}
+#text .preview {
+	overflow: auto;
+}
+#text .preview p {
+	color: white;
+	font-size: 17px;
+}
+#text blockquote {
+	border-left: 1px solid white;
+	padding-left: 10px;
+	opacity: 0.6;
+}
+#text .editor textarea {
+	padding: 0px;
+	margin: 0px;
+	border: none;
+	position: absolute;
+	background: transparent;
+	top: 0px;
+	height: 100%;
+	width: 100%;
+	display: block;
+	left: 0px;
+	resize: none;
+	font: normal 14px Consolas, Courier New, monospace;
+	line-height: 1.6;
+	-webkit-overflow-scrolling: touch;	
+	box-shadow: none;
+}
+#text .editor .buttons {
+	position: absolute;
+	top: -28px;
+	left: -7px;
+}
+/*Simple two layout split*/
+.column {
+	float: left;
+	width: 49%;
+	position: relative;
+}
+.column.right {
+	float: right;
+}
+.section .border .column  {
+	width: 50%;
+}
+.section .border {
+	position: relative;
+}
+.section .border:before {
+	content: '';
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	width: 1px;
+	border-right: 1px solid white;
+	height: 100%;
+	background: #9EABAB;
+	z-index: 1;
+}
+div.modal#preview {
+  width: 1050px;
+  left: 350px;
+  height: 550px;
+  max-height: 550px !important;
+}
+.modal-body#preview {
+  background-color: #DEE9E9;
+}
+div.modal textarea{
+  background-color: #ddd !important;
+  padding: 5px !important;
+}
+div#text .editor {
+  margin-top: 35px !important;
+}
+#text h1, #text h2, #text h3, #text h4, #text h5, #text h6{
+  color: white;
+}
