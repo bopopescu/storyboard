@@ -94,10 +94,16 @@ ul.social li.github{
 }
 .photos a{
 	text-decoration:none;
+	width: 100px;
+  height: 100px;
+  display: block;
 }
 .photos img{
 	border:1px solid #DEE1E4;
 	padding:1px;
+	width: 100px;
+  height: 100px;
+  display: block;
 }
 
 .photos img:hover{
