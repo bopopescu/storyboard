@@ -27,14 +27,14 @@ from django.shortcuts import get_object_or_404
 from models import *
 from forms import *
 
-from google.appengine.api import files
+# from google.appengine.api import files
 from config import GOOGLE_STORAGE,BUCKET,FOLDER
 
-try:
-	files.gs
-except AttributeError:
-	import gs
-	files.gs = gs
+# try:
+#   files.gs
+# except AttributeError:
+#   import gs
+#   files.gs = gs
 
 def index(request):
     return HttpResponseRedirect('/')

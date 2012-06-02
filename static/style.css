@@ -302,7 +302,7 @@ div.page-header {
   word-wrap: break-word;
 }
 .codehilitetable{
-  width: 672px;
+  width: 100%;
 }
 
 .codehilite pre{

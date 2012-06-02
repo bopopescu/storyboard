@@ -25,13 +25,13 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from django.utils import simplejson
 
-from google.appengine.api import files
+# from google.appengine.api import files
 from config import GOOGLE_STORAGE,BUCKET,FOLDER
 
 from models import *
 from forms import *
 
-from google.appengine.api import images
+# from google.appengine.api import images
 
 def photos(request):
     query = Storage.objects.all().order_by('-updated')

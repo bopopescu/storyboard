@@ -20,33 +20,35 @@ from django.shortcuts import get_object_or_404
 from models import *
 from forms import *
 
-from google.appengine.api import memcache
+# from google.appengine.api import memcache
 import logging
 
 def update(request):
-    memcache.flush_all()
+    #memcache.flush_all()
     return HttpResponseRedirect('/')
     
 def index(request,tag=None):
+    query = None
     if tag:
         tag = Tag.objects.get(slug=tag)
-        query = memcache.get('threadswithtag-'+tag.slug)
+        #query = memcache.get('threadswithtag-'+tag.slug)
         if query is None:
             query = Thread.objects.all().order_by('-updated').filter(tag=tag).filter(ref=None)
-            memcache.add('threadswithtag-'+tag.slug, query, 30)
+            #memcache.add('threadswithtag-'+tag.slug, query, 30)
         tags = None
     else:
-        query = memcache.get('threads')
+        #query = memcache.get('threads')
         if query is None:
             query = Thread.objects.all().order_by('-updated').filter(ref=None)
-            memcache.add('threads', query, 30)
+            #memcache.add('threads', query, 30)
        
-        tags = memcache.get('tags')
+        #tags = memcache.get('tags')
+        tags = None
         if tags is not None:
             pass
         else:
             tags = Tag.objects.all().order_by('-updated')
-            memcache.add('tags', tags, 3600)
+            #memcache.add('tags', tags, 3600)
             
     paginator = Paginator(query, 10) # Show 10 contacts per page
     
@@ -87,7 +89,8 @@ def index(request,tag=None):
     else:
         threads.paginator.page_range_list = threads.paginator.page_range
     
-    updated_tags = memcache.get('updated_tags')
+    #updated_tags = memcache.get('updated_tags')
+    updated_tags = None
     if updated_tags is not None:
         pass
     else:
@@ -95,7 +98,7 @@ def index(request,tag=None):
             updated_tags = tags[0:20]
         else:
             updated_tags = Tag.objects.all().order_by('-updated')[:20]
-        memcache.add('updated_tags', updated_tags, 3600) 
+        #memcache.add('updated_tags', updated_tags, 3600) 
     form = ThreadForm()
     values = {'threads':threads,'tags':tags,'updated_tags':updated_tags,'tag':tag,'form':form}
     return render_to_response('board/threads.html',values,context_instance=RequestContext(request))
@@ -120,7 +123,8 @@ def view(request,key):
             return HttpResponseRedirect('/r/'+str(thread.key))
     else:
         form = CommentForm()
-    updated_tags = memcache.get('updated_tags')
+    #updated_tags = memcache.get('updated_tags')
+    updated_tags = None
     tag = thread.tag
     try:
         f = Favorite.objects.get(author=request.user,thread=thread)
@@ -170,8 +174,8 @@ def add_thread(request,tag=None):
             obj.tag = tag
             # obj.title = obj.text.split('\n')[0][0:60].strip()
             obj.save()
-            memcache.delete('threadswithtag')
-            memcache.delete('threads')
+            #memcache.delete('threadswithtag')
+            #memcache.delete('threads')
             return HttpResponseRedirect('/r/'+str(obj.key))
     else:
         form = ThreadForm()

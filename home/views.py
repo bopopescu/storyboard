@@ -26,6 +26,7 @@ from forms import *
 from common.filter import *
 import logging
 import markdown
+from gfm import gfm
 
 def index(request):
     return HttpResponseRedirect('/r')
@@ -122,7 +123,10 @@ def router(request,path=None):
             if page.format == '0':
                 page.text_html = linebreaks(urlize(imgize(page.text)))
             if page.format == '2':
-                page.text_html = markdown.markdown(html_escape(page.text), ['extra','codehilite','toc','nl2br'])
+                html = gfm(page.text)
+                html = page.text
+                page.text_html = markdown.markdown(html, ['extra','codehilite','toc','nl2br'],safe_mode=False, 
+                                   html_replacement_text='--RAW HTML NOT ALLOWED--',output_format='html5')
             values = {'minisite':minisite,'page':page}
         else:
             return HttpResponseRedirect('/%s/'%path)

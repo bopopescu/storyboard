@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     (r'^blog/', include('blog.urls')),
     (r'^photo/', include('storage.urls')),
     # (r'^message/', include('message.urls')),
-    #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT}),
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT}),
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
     #(r'^admin/doc/', include('django.contrib.admindocs.urls')),
