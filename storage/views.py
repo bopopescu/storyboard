@@ -31,6 +31,10 @@ from config import GOOGLE_STORAGE,BUCKET,FOLDER
 from models import *
 from forms import *
 
+import tempfile
+import boto
+import logging
+logger = logging.getLogger(__name__)
 # from google.appengine.api import images
 
 def photos(request):
@@ -112,12 +116,24 @@ def upload(request):
                 file_ext = name[file_ext_pos-file_name_len:]        		
                 file_name = 'uploads/ohbug/photo/%s%s' % (now.strftime('%Y-%m/%d-%H%M%S-%f'),file_ext)
                 file_path = '/%s/%s/%s' % (GOOGLE_STORAGE,BUCKET,file_name)
-                #logging.info(file_path)
                 
-                write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
-                with files.open(write_path, 'a') as fp:
-                    fp.write(file_data)
-                files.finalize(write_path)
+                dst_uri = boto.storage_uri(BUCKET, GOOGLE_STORAGE)
+                
+                new_dst_uri = dst_uri.clone_replace_name(file_name)
+                #logging.info(dst_uri)
+                #logging.info(new_dst_uri)
+                tmp = tempfile.TemporaryFile()
+                tmp.write(file_data)
+                tmp.seek(0)
+                dst_key = new_dst_uri.new_key()
+                dst_key.content_type = content_type
+                dst_key.set_contents_from_file(tmp)
+                #logger.info('hello')
+        		
+                # write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
+                # with files.open(write_path, 'a') as fp:
+                #     fp.write(file_data)
+                # files.finalize(write_path)
                 s = Storage()
                 s.storage  = GOOGLE_STORAGE
                 s.bucket  = BUCKET
@@ -178,10 +194,17 @@ def raw(request,key=None):
         return HttpResponseNotModified()
     #request.META.get("HTTP_IF_NONE_MATCH", None)    
     s = get_object_or_404(Storage,pk=key)
-    read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
-    image_data = read_gs(read_path)
-    if image_data:
-        return cache_response(image_data, s.mime)
+    #read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
+    #image_data = read_gs(read_path)
+    
+    src_uri = boto.storage_uri(s.bucket + '/' + s.path, 'gs')
+    src_key = src_uri.get_key()
+    tmp = tempfile.TemporaryFile()
+    src_key.get_file(tmp)
+    tmp.seek(0)
+    
+    if tmp:
+        return cache_response(tmp, s.mime)
     else:
         return HttpResponseNotFound()
     
@@ -190,32 +213,39 @@ def thumbnail(request,key=None):
         return HttpResponseNotModified()
     s = get_object_or_404(Storage,pk=key)
     read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
-    image_data = read_gs(read_path)
+    #image_data = read_gs(read_path)
+    src_uri = boto.storage_uri(s.bucket + '/' + s.path, 'gs')
+    src_key = src_uri.get_key()
+    tmp = tempfile.TemporaryFile()
+    src_key.get_file(tmp)
+    tmp.seek(0)
+    image_data = tmp
+    
     if image_data:
-        MIN_SIZE = 100
-        image = images.Image(image_data)
-        width = image.width
-        height = image.height
-        if width>height:
-            rate = width*1.0/height
-        else:
-            rate = height*1.0/width
-        size = int(MIN_SIZE*rate+1)
-        new_image = images.resize(image_data, width=size, height=size, output_encoding=images.PNG)      
-        image = images.Image(new_image)
-        right_x = round(MIN_SIZE*1.0/image.width,5)
-        if right_x>1:
-            right_x = 1.0
-        else:
-            left_x = (1- right_x)/2
-            right_x = right_x + left_x
-        bottom_y = round(MIN_SIZE*1.0/image.height,5)
-        if bottom_y >1:
-            bottom_y = 1.0
-        else:
-            top_y = (1-bottom_y)/2
-            bottom_y = bottom_y + top_y
-        new_image = images.crop(new_image, left_x, top_y, right_x, bottom_y, output_encoding=images.PNG)
-        return cache_response(new_image, s.mime)
+        # MIN_SIZE = 100
+        # image = images.Image(image_data)
+        # width = image.width
+        # height = image.height
+        # if width>height:
+        #     rate = width*1.0/height
+        # else:
+        #     rate = height*1.0/width
+        # size = int(MIN_SIZE*rate+1)
+        # new_image = images.resize(image_data, width=size, height=size, output_encoding=images.PNG)      
+        # image = images.Image(new_image)
+        # right_x = round(MIN_SIZE*1.0/image.width,5)
+        # if right_x>1:
+        #     right_x = 1.0
+        # else:
+        #     left_x = (1- right_x)/2
+        #     right_x = right_x + left_x
+        # bottom_y = round(MIN_SIZE*1.0/image.height,5)
+        # if bottom_y >1:
+        #     bottom_y = 1.0
+        # else:
+        #     top_y = (1-bottom_y)/2
+        #     bottom_y = bottom_y + top_y
+        # new_image = images.crop(new_image, left_x, top_y, right_x, bottom_y, output_encoding=images.PNG)
+        return cache_response(image_data, s.mime)
     else:
         return HttpResponseNotFound()
