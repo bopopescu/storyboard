@@ -37,6 +37,11 @@ import logging
 logger = logging.getLogger(__name__)
 # from google.appengine.api import images
 
+# config = boto.config
+# config.add_section('Credentials')
+# config.set('Credentials', 'gs_access_key_id', '')
+# config.set('Credentials', 'gs_secret_access_key', '')
+
 def photos(request):
     query = Storage.objects.all().order_by('-updated')
     return render_to_response('storage/photos.html',{'photos':query},context_instance=RequestContext(request))
@@ -246,6 +251,23 @@ def thumbnail(request,key=None):
         #     top_y = (1-bottom_y)/2
         #     bottom_y = bottom_y + top_y
         # new_image = images.crop(new_image, left_x, top_y, right_x, bottom_y, output_encoding=images.PNG)
-        return cache_response(image_data, s.mime)
+        #return cache_response(image_data, s.mime)
+        import Image
+        import StringIO
+        img = Image.open(StringIO.StringIO(tmp.read()))
+        region = img.resize((100, 100))
+        
+        response = HttpResponse(mimetype="image/png")
+        format_str = '%a, %d %b %Y %H:%M:%S GMT'
+        expires_date = datetime.datetime.utcnow() + datetime.timedelta(365)
+        expires_str = expires_date.strftime(format_str)
+        last_modified_date = datetime.datetime.utcnow()
+        last_modified_str = expires_date.strftime(format_str)
+        response['Expires'] = expires_str #eg:'Sun, 08 Apr 2013 11:11:02 GMT'
+        response["Last-Modified"] = last_modified_str #for 'If-Modified-Since'
+        response['Cache-Control'] = 'max-age=172800'
+        
+        region.save(response, 'PNG')
+        return response
     else:
         return HttpResponseNotFound()
