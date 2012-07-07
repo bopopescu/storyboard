@@ -3,3 +3,5 @@
 *.pyo
 settings.py
 config.py
+
+boto.cfg
