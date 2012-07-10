@@ -252,11 +252,11 @@ def thumbnail(request,key=None):
         #     bottom_y = bottom_y + top_y
         # new_image = images.crop(new_image, left_x, top_y, right_x, bottom_y, output_encoding=images.PNG)
         #return cache_response(image_data, s.mime)
-        import Image
+        import Image,ImageOps
         import StringIO
         img = Image.open(StringIO.StringIO(tmp.read()))
-        region = img.resize((100, 100))
-        
+        #region = img.resize((100, 100),Image.ANTIALIAS)
+        region = ImageOps.fit(img,(100, 100),Image.ANTIALIAS)
         response = HttpResponse(mimetype="image/png")
         format_str = '%a, %d %b %Y %H:%M:%S GMT'
         expires_date = datetime.datetime.utcnow() + datetime.timedelta(365)
@@ -267,7 +267,7 @@ def thumbnail(request,key=None):
         response["Last-Modified"] = last_modified_str #for 'If-Modified-Since'
         response['Cache-Control'] = 'max-age=172800'
         
-        region.save(response, 'PNG')
+        region.save(response, 'PNG', quality = 100)
         return response
     else:
         return HttpResponseNotFound()

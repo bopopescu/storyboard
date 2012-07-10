@@ -35,7 +35,11 @@ class MineEntryListView(ListView):
     template_name = "blog/blogs.html"
 
     def get_queryset(self):
-        return Entry.objects.all().filter(author=self.request.user).order_by('-updated')
+        entries = Entry.objects.all().filter(author=self.request.user).order_by('-updated')
+        for entry in entries:
+            entry.text_html = markdown.markdown(entry.text, ['codehilite','toc','nl2br','abbr','def_list','footnotes','fenced_code','headerid(level=3)','tables'],safe_mode='escape', 
+                               html_replacement_text='--RAW HTML NOT ALLOWED--',output_format='html5')
+        return entries
                 
 class EntryListView(ListView):
     context_object_name = "entries"
@@ -43,7 +47,11 @@ class EntryListView(ListView):
     paginate_by = 10
     #page = 1
     def get_queryset(self):
-        return Entry.objects.all().filter(status='0').order_by('-updated')
+        entries = Entry.objects.all().filter(status='0').order_by('-updated')
+        for entry in entries:
+            entry.text_html = markdown.markdown(entry.text, ['codehilite','toc','nl2br','abbr','def_list','footnotes','fenced_code','headerid(level=3)','tables'],safe_mode='escape', 
+                               html_replacement_text='--RAW HTML NOT ALLOWED--',output_format='html5')
+        return entries
     # template_name = "blog/blogs.html"
     # context_object_name = "blogs"
     # #model = Entry
@@ -66,6 +74,9 @@ class EntryDetailView(DetailView):
         # object.last_accessed = datetime.datetime.now()
         # object.save()
         # Return the object
+        object.text_html = markdown.markdown(object.text, ['codehilite','toc','nl2br','abbr','def_list','footnotes','fenced_code','headerid(level=3)','tables'],safe_mode='escape', 
+                           html_replacement_text='--RAW HTML NOT ALLOWED--',output_format='html5')
+        print object.text_html
         return object
     def get_context_data(self, **kwargs):
         context = super(EntryDetailView, self).get_context_data(**kwargs)

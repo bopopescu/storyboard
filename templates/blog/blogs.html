@@ -20,7 +20,29 @@
 	
 <ul>
 	{% for entry in entries %}
-	<li><a href="/blog/entry/{{entry.key}}">{{entry.title}}</a></li>
+	<li style="list-style-type: none;"><a href="/blog/entry/{{entry.key}}" style="display:none;">{{entry.title}}</a>
+	<div style="padding-bottom: 5px;margin: 5px 0;border-bottom: 1px solid #EEE;">
+		<div class="page-header" style="border-bottom: 1px dashed #EEE;">
+		  <h2><a href="/blog/entry/{{entry.key}}">{{entry.title}}</a></h2>
+		</div>
+		<div>
+		{% autoescape off %}
+		{{entry.text_html}}
+		{% endautoescape %}
+		</div>
+		<div>
+			{{ entry.updated|date:"Y-m-d H:i:s" }}
+		</div>
+		{% if relationship %}
+		<div>
+			Tags:
+			{% for r in relationship %}
+			<a href="#{{r.tag.slug}}">{{r.tag.name}}</a>
+			{% endfor %}
+		</div>
+		{% endif %}
+	</div>	
+	</li>
 	{% endfor %}
 </ul>
 
