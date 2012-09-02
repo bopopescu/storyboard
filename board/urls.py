@@ -8,6 +8,8 @@ Copyright (c) 2012 Close To U. All rights reserved.
 """
 
 from django.conf.urls.defaults import *
+from views import LatestEntries
+
 urlpatterns = patterns('board.views',
             (r'^$','index'),
             (r'^add/(?P<tag>\w+)$','add_thread'),
@@ -18,6 +20,7 @@ urlpatterns = patterns('board.views',
             (r'^(?P<key>\d+)/favorite$','favorite'),
             (r'^favorites$','favorites'),
             (r'^update$','update'),
+			(r'^atom$',LatestEntries()),
             #(r'^(?P<tag>\w+)$','tag'),
             # (r'^(?P<key>\d+)/edit$','edit'),
             # (r'^(?P<key>\d+)/delete$','delete'),

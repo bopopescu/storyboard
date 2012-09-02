@@ -29,7 +29,9 @@
 		<ul class="thread-list">
 			{% for thread in threads.object_list %}
 			<li>
-			<a class="avatar" href="/member/{{ thread.author.username }}" title="{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}"><img src="{{thread.author.email|gravatar }}"></a>
+			<a class="avatar" href="/member/{{ thread.author.username }}" title="{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}">
+				<img src="{{thread.author.email|gravatar }}" width="48" height="48">
+			</a>
 			<span class="post-meta">
 				<a href="/member/{{ thread.author.username }}" class="author">{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}</a>  -  <a class="stamp" href="#thread-preview-{{thread.key}}" title="{{thread.updated|date:"Y-m-d H:i:s"}}" data-toggle="modal"> {{thread.updated|timesince}} ago</a>  -  <a href="/r/tag/{{thread.tag.slug}}" class="node" rel="popover" data-content="" data-original-title="" title="{{thread.tag.name}}">{{thread.tag.name}}</a></span>
 			<span class="post-title"><a href="/r/{{thread.key}}" class="" title="{{thread.title}}">{{thread.title}}</a></span>

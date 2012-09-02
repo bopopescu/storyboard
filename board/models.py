@@ -46,6 +46,9 @@ class Thread(models.Model):
         result = self.title
         return unicode(result)
 
+    # def get_absolute_url(self):
+    #   pass
+
 class Favorite(models.Model):
     key = models.AutoField(primary_key=True)
     thread = models.ForeignKey(Thread,verbose_name='thread')

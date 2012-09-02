@@ -8,7 +8,8 @@ Copyright (c) 2012 Close To U. All rights reserved.
 """
 
 from django.conf.urls.defaults import *
-from blog.views import * 
+from blog.views import *
+from views import LatestEntries 
 
 urlpatterns = patterns('blog.views',
             (r'^$',EntryListView.as_view()),
@@ -16,6 +17,7 @@ urlpatterns = patterns('blog.views',
             (r'^mine$',MineEntryListView.as_view()),
             (r'^add$', 'add'),
             (r'^entry/(?P<key>\d+)/edit$','edit'),
+            (r'^atom$',LatestEntries()),
             # (r'^(?P<key>\d+)$','view'),
             # (r'^(?P<key>\d+)/delete$','delete'),
         )

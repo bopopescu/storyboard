@@ -17,6 +17,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 
+from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Atom1Feed
+
 from models import *
 from forms import *
 
@@ -185,3 +188,15 @@ def add_thread(request,tag=None):
 def delete(request):
     query = Thread.objects.all().order_by('-updated')
     return render_to_response('index.html',{'threads':query},context_instance=RequestContext(request))
+
+class LatestEntries(Feed):
+    feed_type = Atom1Feed
+    title = "OhBug Latest Topic"
+    link = "/r/"
+    description = "Updates on changes and additions to ohbug.com."
+
+    def items(self):
+        return Thread.objects.all().order_by('-updated').filter(ref=None)[:10]
+
+    def item_link(self, item):
+        return 'http://www.ohbug.com/r/' + str(item.key)

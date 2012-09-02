@@ -19,6 +19,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
 
+from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Atom1Feed
+
 from models import *
 from forms import *
 
@@ -76,7 +79,6 @@ class EntryDetailView(DetailView):
         # Return the object
         object.text_html = markdown.markdown(object.text, ['codehilite','toc','nl2br','abbr','def_list','footnotes','fenced_code','headerid(level=3)','tables'],safe_mode='escape', 
                            html_replacement_text='--RAW HTML NOT ALLOWED--',output_format='html5')
-        print object.text_html
         return object
     def get_context_data(self, **kwargs):
         context = super(EntryDetailView, self).get_context_data(**kwargs)
@@ -181,3 +183,15 @@ def edit(request,key):
             relation += ','
         form = EntryForm(instance=entry,initial ={'tags':relation[:-1]})
     return render_to_response('blog/add.html',{'form':form},context_instance=RequestContext(request))
+    
+class LatestEntries(Feed):
+    feed_type = Atom1Feed
+    title = "OhBug Latest Blogging"
+    link = "/r/"
+    description = "Updates on changes and additions to ohbug.com."
+
+    def items(self):
+        return Entry.objects.all().filter(status='0').order_by('-updated')[:10]
+
+    def item_link(self, item):
+        return 'http://www.ohbug.com//blog/entry/' + str(item.key)
