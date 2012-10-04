@@ -147,7 +147,11 @@ ul.thread-list li:nth-child(odd) {
 }
 
 ul.thread-list li:hover{
-	background-color: #f0f0f3;*/
+	background-color: #f0f0f3;
+}
+.thread-content{
+    word-break: break-word;
+    word-wrap: break-word;
 }
 ul.thread-list .post-meta,.thread-content .post-meta {
 	padding-top: 6px;
