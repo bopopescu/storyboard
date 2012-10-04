@@ -51,7 +51,7 @@
           <div class="thread-meta">
             Posted on <a href="/r/tag/{{thread.tag.slug}}" class="node" rel="popover" data-content="" data-original-title="" title="{{thread.tag.name}}">{{thread.tag.name}}</a> by <a href="/member/{{ thread.author.username }}" class="author">{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}</a> at {{thread.updated|timesince}} ago
           </div>
-          <div>
+          <div class="thread-content">
           {{ thread.text|imgize|urlize|linebreaks }}
           </div>
         </div>
