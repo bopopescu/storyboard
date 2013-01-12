@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     (r'^note/', include('note.urls')),
     (r'^blog/', include('blog.urls')),
     (r'^photo/', include('storage.urls')),
+    (r'^todo/', include('todo.urls')),
     # (r'^message/', include('message.urls')),
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT}),
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

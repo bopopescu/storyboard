@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,14 +37,14 @@
 				<div class="nav-collapse">
 				  <!-- .nav, .navbar-search, .navbar-form, etc -->
 					<ul class="nav">
-					  <li class="active"><a href="/">Home</a></li>
-						<li><a href="/r">Board</a></li>
-						<li><a href="/blog">Blog</a></li>
-						<li><a href="/photo">Photo</a></li>
-						<li><a href="/link">Link</a></li>
-					 	<li><a href="/note">Note</a></li>
-					 	<li><a href="/toto">Todo</a></li>
-					  	<li><a href="/about">About</a></li>
+					  <li class="active"><a href="/">{% trans "Home" %}</a></li>
+						<li><a href="/r">{% trans "Board" %}</a></li>
+						<li><a href="/blog">{% trans "Blog" %}</a></li>
+						<li><a href="/photo">{% trans "Photo" %}</a></li>
+						<li><a href="/link">{% trans "Link" %}</a></li>
+					 	<li><a href="/note">{% trans "Note" %}</a></li>
+					 	<li><a href="/todo">{% trans "Todo" %}</a></li>
+					  	<li><a href="/about">{% trans "About" %}</a></li>
 					</ul>
 					<!--form class="navbar-search pull-left">
 					  <input type="text" class="search-query" placeholder="Search">
@@ -64,12 +65,12 @@
 								<li><a href="/auth/password_change">Change password</a></li>
 								<li><a href="/auth/logs">Login logs</a></li>
 								<li class="divider"></li>
-								<li><a href="/auth/signout">Sign Out</a></li>
+								<li><a href="/auth/signout">{% trans "Sign Out" %}</a></li>
 					    </ul>
 					  </li>
 						{% else %}
-						<li class=""><a href="/auth/signup">Signup</a></li>
-						<li class=""><a href="/auth/signin">Signin</a></li>
+						<li class=""><a href="/auth/signup">{% trans "Sign Up" %}</a></li>
+						<li class=""><a href="/auth/signin">{% trans "Sign In" %}</a></li>
 						{% endif %}
 					</ul>
 				</div>
@@ -101,8 +102,8 @@
   						    <span>Oh Bug!  - Fun with Programming.</span>
   						  </div>
   						  <div align="center" style="padding:10px">
-  						    <a class="btn" href="/auth/signin">Signin</a>
-  						    or <a class="btn" href="/auth/signup">Signup</a>
+  						    <a class="btn" href="/auth/signin">Sign In</a>
+  						    or <a class="btn" href="/auth/signup">Sign Up</a>
   						  </div>
 							{%endif%}
 						</div>
