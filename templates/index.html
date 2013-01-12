@@ -5,6 +5,7 @@
 </header>
 
 <div class="main photos">
+  <a href="/photo">Latest Photos</a>
 <ul>
   {% for photo in photos %}
   <li>
@@ -13,34 +14,40 @@
   {% endfor %}
 </ul>
 </div>
-
-<div id="myCarousel" class="carousel">
-  <!-- Carousel items -->
-  <div class="carousel-inner">
-    <div class="active item">
-    	<img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-01.jpg" alt="">
-      <div class="carousel-caption">
-        <h4>First Thumbnail label</h4>
-        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+{% load filter %}
+<div class="main">
+  <a href="/r">Latest Threads</a>
+<ul class="thread-list">
+      {% for thread in threads %}
+      <li>
+      <a class="avatar" href="/member/{{ thread.author.username }}" title="{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}">
+        <img src="{{thread.author.email|gravatar }}" width="48" height="48">
+      </a>
+      <span class="post-meta">
+        <a href="/member/{{ thread.author.username }}" class="author">{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}</a>  -  <a class="stamp" href="#thread-preview-{{thread.key}}" title="{{thread.updated|date:"Y-m-d H:i:s"}}" data-toggle="modal"> {{thread.updated|timesince}} ago</a>  -  <a href="/r/tag/{{thread.tag.slug}}" class="node" rel="popover" data-content="" data-original-title="" title="{{thread.tag.name}}">{{thread.tag.name}}</a></span>
+      <span class="post-title"><a href="/r/{{thread.key}}" class="" title="{{thread.title}}">{{thread.title}}</a></span>
+      <a href="/r/{{thread.key}}#last-reply" class="last-count">{{thread.release}}</a>
+      <span class="stamp"></span>
+      
+      <div class="modal fade hide" id="thread-preview-{{thread.key}}">
+        <div class="modal-header">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3>{{thread.title}}</h3>
+        </div>
+        <div class="modal-body">
+          <div class="thread-meta">
+            Posted on <a href="/r/tag/{{thread.tag.slug}}" class="node" rel="popover" data-content="" data-original-title="" title="{{thread.tag.name}}">{{thread.tag.name}}</a> by <a href="/member/{{ thread.author.username }}" class="author">{% if thread.author.get_full_name %}{{thread.author.get_full_name}} {% else %} {{ thread.author.username }} {% endif %}</a> at {{thread.updated|timesince}} ago
+          </div>
+          <div class="thread-content">
+          {{ thread.text|imgize|urlize|linebreaks }}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
       </div>
-    </div>
-    <div class="item">
-			<img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-02.jpg" alt="">
-			<div class="carousel-caption">
-			<h4>Second Thumbnail label</h4>
-			<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-			</div>
-    </div>
-    <div class="item">
-			<img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-03.jpg" alt="">
-			<div class="carousel-caption">
-			<h4>Third Thumbnail label</h4>
-			<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-			</div>
-    </div>
-  </div>
-  <!-- Carousel nav -->
-  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+      </li>
+      {% endfor %}
+    </ul>
 </div>
 {% endblock %}

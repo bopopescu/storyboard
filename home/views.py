@@ -29,11 +29,13 @@ import markdown
 from gfm import gfm
 
 from storage.models import *
+from board.models import *
 
 def index(request):
-    query = Storage.objects.all().order_by('-updated')
+    query = Storage.objects.all().order_by('-updated')[:4]
+    threads = Thread.objects.all().order_by('-updated').filter(ref=None)
     #return HttpResponseRedirect('/r')
-    return render_to_response('index.html',{'photos':query},context_instance=RequestContext(request))
+    return render_to_response('index.html',{'photos':query,'threads':threads},context_instance=RequestContext(request))
         
 def about(request):
     return render_to_response('home/about.html',{},context_instance=RequestContext(request))
