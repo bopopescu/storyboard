@@ -1,8 +1,19 @@
 {% extends "layout.html" %}
 {% block body %}
 <header>	
-	Hello World. <br>
+
 </header>
+
+<div class="main photos">
+<ul>
+  {% for photo in photos %}
+  <li>
+    <a href="/photo/{{photo.key}}" title="{{photo.name}}"><img src="/photo/thumb/{{photo.key}}.png" width="100" height="100" alt="{{photo.name}}"/></a>
+  </li>
+  {% endfor %}
+</ul>
+</div>
+
 <div id="myCarousel" class="carousel">
   <!-- Carousel items -->
   <div class="carousel-inner">

@@ -28,9 +28,12 @@ import logging
 import markdown
 from gfm import gfm
 
+from storage.models import *
+
 def index(request):
-    return HttpResponseRedirect('/r')
-    #return render_to_response('index.html',{},context_instance=RequestContext(request))
+    query = Storage.objects.all().order_by('-updated')
+    #return HttpResponseRedirect('/r')
+    return render_to_response('index.html',{'photos':query},context_instance=RequestContext(request))
         
 def about(request):
     return render_to_response('home/about.html',{},context_instance=RequestContext(request))
