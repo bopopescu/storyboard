@@ -1,11 +1,12 @@
 {% extends "layout.html" %}
+{% load i18n %}
 {% block body %}
 <header>	
 
 </header>
 
 <div class="main photos">
-  <a href="/photo">Latest Photos</a>
+  <a href="/photo">{% trans "Latest Photos" %}</a>
 <ul>
   {% for photo in photos %}
   <li>
@@ -16,7 +17,7 @@
 </div>
 {% load filter %}
 <div class="main">
-  <a href="/r">Latest Threads</a>
+  <a href="/r">{% trans "Latest Threads" %}</a>
 <ul class="thread-list">
       {% for thread in threads %}
       <li>

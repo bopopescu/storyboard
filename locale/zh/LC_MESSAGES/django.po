@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-12 21:36+0800\n"
+"POT-Creation-Date: 2013-01-12 22:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,19 +29,28 @@ msgstr ""
 msgid "The two password fields didn't match."
 msgstr ""
 
-#: templates/layout.html:41
+#: templates/index.html:9
+msgid "Latest Photos"
+msgstr "最新照片"
+
+#: templates/index.html:20
+msgid "Latest Threads"
+msgstr "最新帖子"
+
+#: templates/layout.html:41 templates/blog/blogs.html:10
+#: templates/board/threads.html:10 templates/storage/photos.html:6
 msgid "Home"
 msgstr "首页"
 
-#: templates/layout.html:42
+#: templates/layout.html:42 templates/board/threads.html:13
 msgid "Board"
 msgstr "帖子"
 
-#: templates/layout.html:43
+#: templates/layout.html:43 templates/blog/blogs.html:13
 msgid "Blog"
 msgstr "博客"
 
-#: templates/layout.html:44
+#: templates/layout.html:44 templates/storage/photos.html:9
 msgid "Photo"
 msgstr "照片"
 
@@ -61,14 +70,87 @@ msgstr "任务"
 msgid "About"
 msgstr "关于"
 
+#: templates/layout.html:63
+msgid "Settings"
+msgstr "设置"
+
+#: templates/layout.html:64
+msgid "Custom Style"
+msgstr "自定义样式"
+
+#: templates/layout.html:66
+msgid "Change password"
+msgstr "更改密码"
+
+#: templates/layout.html:67
+msgid "Login logs"
+msgstr "日志"
+
 #: templates/layout.html:69
 msgid "Sign Out"
-msgstr ""
+msgstr "注销"
 
 #: templates/layout.html:73
 msgid "Sign Up"
 msgstr "注册"
 
-#: templates/layout.html:74
+#: templates/layout.html:74 templates/account/login.html:11
 msgid "Sign In"
 msgstr "登录"
+
+#: templates/layout.html:97
+msgid "Favorites"
+msgstr "收藏"
+
+#: templates/layout.html:106
+msgid "Sign Up Now!"
+msgstr "现在注册"
+
+#: templates/layout.html:109
+msgid "Registered user? "
+msgstr "已注册用户"
+
+#: templates/layout.html:109
+msgid "Please Sign In"
+msgstr "请登录"
+
+#: templates/layout.html:117
+msgid "Latest Tags"
+msgstr "最近新增标签"
+
+#: templates/layout.html:118
+msgid "All Tags"
+msgstr "所有标签"
+
+#: templates/layout.html:130
+msgid "Atom Feeds"
+msgstr "订阅Feeds"
+
+#: templates/layout.html:133
+msgid "Board Feeds"
+msgstr "帖子信息"
+
+#: templates/layout.html:133
+msgid "Blog Feeds"
+msgstr "博客信息"
+
+#: templates/blog/blogs.html:17
+msgid "Mine"
+msgstr "我的"
+
+#: templates/blog/blogs.html:20 templates/board/threads.html:20
+#: templates/board/threads.html.py:24
+msgid "Add"
+msgstr "添加"
+
+#: templates/blog/blogs.html:58 templates/blog/blogs.html.py:60
+msgid "Prev"
+msgstr "上一页"
+
+#: templates/blog/blogs.html:75 templates/blog/blogs.html.py:77
+msgid "Next"
+msgstr "下一页"
+
+#: templates/storage/photos.html:13
+msgid "Upload"
+msgstr "上传"

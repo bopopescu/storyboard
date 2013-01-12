@@ -59,11 +59,11 @@
 					          <b class="caret"></b>
 					    </a>
 					    <ul class="dropdown-menu">
-								<li><a href="/settings">Settings</a></li>
-								<li><a href="/settings/custom_style">Custom Style</a></li>
+								<li><a href="/settings">{% trans "Settings" %}</a></li>
+								<li><a href="/settings/custom_style">{% trans "Custom Style" %}</a></li>
 								<li class="divider"></li>
-								<li><a href="/auth/password_change">Change password</a></li>
-								<li><a href="/auth/logs">Login logs</a></li>
+								<li><a href="/auth/password_change">{% trans "Change password" %}</a></li>
+								<li><a href="/auth/logs">{% trans "Login logs" %}</a></li>
 								<li class="divider"></li>
 								<li><a href="/auth/signout">{% trans "Sign Out" %}</a></li>
 					    </ul>
@@ -93,7 +93,7 @@
 								<a href="/member/{{ user.username }}" class="avatar"><img src="{% gravatar_url user.email %}"  class="avatar-normal"></a> <a href="/member/{{ user.username }}">{% if user.get_full_name %}{{user.get_full_name}} {% else %} {{ user.username }} {% endif %}</a></div>
 							<div>Last: {{ user.last_login|date:"Y-m-d H:i:s" }}</div>
 							<div class="btn-group">
-							  <a class="btn" href="/r/favorites">Favorites</a>
+							  <a class="btn" href="/r/favorites">{% trans "Favorites" %}</a>
 							  <!--a class="btn" href="#">222</a>
 							  <a class="btn" href="#">333</a-->
 							</div>
@@ -102,8 +102,10 @@
   						    <span>Oh Bug!  - Fun with Programming.</span>
   						  </div>
   						  <div align="center" style="padding:10px">
-  						    <a class="btn" href="/auth/signin">Sign In</a>
-  						    or <a class="btn" href="/auth/signup">Sign Up</a>
+  						    <a class="btn" href="/auth/signup">{% trans "Sign Up Now!" %}</a>
+  						  </div>
+  						  <div align="center">
+  						  	{% trans "Registered user? " %}<a class="" href="/auth/signin">{% trans "Please Sign In" %}</a>
   						  </div>
 							{%endif%}
 						</div>
@@ -111,8 +113,8 @@
 						{% if updated_tags %}
 						<div class="widget">
 						  <div class="widget-header">
-						    <span class="widget-title">Latest Tags</span>
-						    <a class="widget-tagline" href="/r/tag" title="All Tags">All Tags</a>
+						    <span class="widget-title">{% trans "Latest Tags" %}</span>
+						    <a class="widget-tagline" href="/r/tag" title="All Tags">{% trans "All Tags" %}</a>
 						  </div>
 							<div>
 							{% for tag in updated_tags %}
@@ -124,10 +126,10 @@
 						
 						<div class="widget">
 							<div class="widget-header">
-								Atom Feeds
+								{% trans "Atom Feeds" %}
 							</div>
 							<div>
-								<a href="/r/atom" class="thread-tag">Board Feeds</a> <a href="/blog/atom" class="thread-tag">Blog Feeds</a>
+								<a href="/r/atom" class="thread-tag">{% trans "Board Feeds" %}</a> <a href="/blog/atom" class="thread-tag">{% trans "Blog Feeds" %}</a>
 							</div>
 						</div>
 						

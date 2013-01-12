@@ -1,15 +1,16 @@
 {% extends "layout.html" %}
+{% load i18n %}
 {% block body %}
 <ul class="breadcrumb">
   <li>
-    <a href="/">Home</a> <span class="divider">/</span>
+    <a href="/">{% trans "Home" %}</a> <span class="divider">/</span>
   </li>
   <li class="active">
-    <a href="/photo">Photo</a> 
+    <a href="/photo">{% trans "Photo" %}</a> 
   </li>
 {% if user.is_authenticated %}
 	<li style="float:right;">
-    <a href="/photo/upload">Upload</a>
+    <a href="/photo/upload">{% trans "Upload" %}</a>
   </li>
 {% endif %}
 </ul>
