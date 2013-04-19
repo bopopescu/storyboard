@@ -172,7 +172,7 @@
 	<div class="container">
 		<hr>
 		<footer>
-		<p>&copy; {{ site.sitename }} 2012, Powered by <a href="https://github.com/darcyliu/storyboard" target="_blank" title="Story Board">Story Board</a> {{ site.version }} , Hosted by <a href="http://www.linode.com/?r=8dd6ddd391fc320d9f55ad101e051bde767df599" target="_blank" title="Linode">Linode</a>, Now:{% now "Y-m-d H:i:s" %} (UTC +08:00) {% if request.META.HTTP_X_FORWARDED_FOR %} {{request.META.HTTP_X_FORWARDED_FOR}} / {% endif %} {{request.META.REMOTE_ADDR}}</p>
+		<p>&copy; {{ site.sitename }} {% now "Y" %}, Powered by <a href="https://github.com/darcyliu/storyboard" target="_blank" title="Story Board">Story Board</a> {{ site.version }} , Hosted by <a href="http://www.linode.com/?r=8dd6ddd391fc320d9f55ad101e051bde767df599" target="_blank" title="Linode">Linode</a>, Now:{% now "Y-m-d H:i:s" %} (UTC +08:00) {% if request.META.HTTP_X_FORWARDED_FOR %} {{request.META.HTTP_X_FORWARDED_FOR}} / {% endif %} {{request.META.REMOTE_ADDR}}</p>
 		{% if user.is_superuser %}
 		<!--p>{{user.is_authenticated}} {{csrf_token}} {{user}} {{ debug }} {{LANGUAGE_CODE}}</p-->
 		<p>{{request.META.HTTP_USER_AGENT}}</p>
