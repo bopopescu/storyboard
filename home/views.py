@@ -32,7 +32,7 @@ from storage.models import *
 from board.models import *
 
 def index(request):
-    query = Storage.objects.all().order_by('-updated')[:4]
+    query = Storage.objects.all().order_by('-updated')[:5]
     threads = Thread.objects.all().order_by('-updated').filter(ref=None)[:5]
     #return HttpResponseRedirect('/r')
     return render_to_response('index.html',{'photos':query,'threads':threads},context_instance=RequestContext(request))

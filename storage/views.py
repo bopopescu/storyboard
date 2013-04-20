@@ -26,7 +26,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils import simplejson
 
 # from google.appengine.api import files
-from config import GOOGLE_STORAGE,BUCKET,FOLDER
+from config import STORAGE_SERVICE,STORAGE_BUCKET,STORAGE_FOLDER
 
 from models import *
 from forms import *
@@ -71,7 +71,7 @@ def ajax_upload(request):
                 return
             file_ext = name[file_ext_pos-file_name_len:]        		
             file_name = 'uploads/ohbug/photo/%s%s' % (now.strftime('%Y-%m/%d-%H%M%S-%f'),file_ext)
-            file_path = '/%s/%s/%s' % (GOOGLE_STORAGE,BUCKET,file_name)
+            file_path = '/%s/%s/%s' % (STORAGE_SERVICE,STORAGE_BUCKET,file_name)
             #logging.info(file_path)
             
             write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
@@ -79,8 +79,8 @@ def ajax_upload(request):
                 fp.write(file_data)
             files.finalize(write_path)
             s = Storage()
-            s.storage  = GOOGLE_STORAGE
-            s.bucket  = BUCKET
+            s.storage  = STORAGE_SERVICE
+            s.bucket  = STORAGE_BUCKET
             s.path = file_name
             s.mime = content_type
             s.size = len(file_data)
@@ -118,30 +118,41 @@ def upload(request):
                     return
                 if file_ext_pos<=0 and file_ext_pos>=file_name_len:
                     return
-                file_ext = name[file_ext_pos-file_name_len:]        		
+                file_ext = name[file_ext_pos-file_name_len:].lower()
+                file_uri  = '%s%s' % (now.strftime('%Y-%m-%d-%H%M%S-%f'),file_ext)    		
                 file_name = 'uploads/ohbug/photo/%s%s' % (now.strftime('%Y-%m/%d-%H%M%S-%f'),file_ext)
-                file_path = '/%s/%s/%s' % (GOOGLE_STORAGE,BUCKET,file_name)
-                
-                dst_uri = boto.storage_uri(BUCKET, GOOGLE_STORAGE)
-                
-                new_dst_uri = dst_uri.clone_replace_name(file_name)
-                #logging.info(dst_uri)
-                #logging.info(new_dst_uri)
-                tmp = tempfile.TemporaryFile()
-                tmp.write(file_data)
-                tmp.seek(0)
-                dst_key = new_dst_uri.new_key()
-                dst_key.content_type = content_type
-                dst_key.set_contents_from_file(tmp)
-                #logger.info('hello')
-        		
-                # write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
-                # with files.open(write_path, 'a') as fp:
-                #     fp.write(file_data)
-                # files.finalize(write_path)
+                file_path = '/%s/%s/%s' % (STORAGE_SERVICE,STORAGE_BUCKET,file_name)
+
+                if STORAGE_SERVICE == 'sina':
+                    import sae.storage
+                    s = sae.storage.Client()
+                    ob = sae.storage.Object(file_data,expires='', content_type=content_type, content_encoding='gzip')
+                    s.put(STORAGE_BUCKET, file_uri , ob)
+                    file_name = file_uri
+
+                # Google Storage
+                if STORAGE_SERVICE == 'gs':
+                    dst_uri = boto.storage_uri(STORAGE_BUCKET, STORAGE_SERVICE)
+                    
+                    new_dst_uri = dst_uri.clone_replace_name(file_name)
+                    #logging.info(dst_uri)
+                    #logging.info(new_dst_uri)
+                    tmp = tempfile.TemporaryFile()
+                    tmp.write(file_data)
+                    tmp.seek(0)
+                    dst_key = new_dst_uri.new_key()
+                    dst_key.content_type = content_type
+                    dst_key.set_contents_from_file(tmp)
+                    #logger.info('hello')
+            		
+                    # write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
+                    # with files.open(write_path, 'a') as fp:
+                    #     fp.write(file_data)
+                    # files.finalize(write_path)
+
                 s = Storage()
-                s.storage  = GOOGLE_STORAGE
-                s.bucket  = BUCKET
+                s.storage  = STORAGE_SERVICE
+                s.bucket  = STORAGE_BUCKET
                 s.path = file_name
                 s.mime = content_type
                 s.size = len(file_data)
@@ -201,12 +212,23 @@ def raw(request,key=None):
     s = get_object_or_404(Storage,pk=key)
     #read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
     #image_data = read_gs(read_path)
-    
-    src_uri = boto.storage_uri(s.bucket + '/' + s.path, 'gs')
-    src_key = src_uri.get_key()
-    tmp = tempfile.TemporaryFile()
-    src_key.get_file(tmp)
-    tmp.seek(0)
+    tmp = None
+
+    if STORAGE_SERVICE == 'sina':
+        import sae.storage
+        sc = sae.storage.Client()
+        ob = sc.get(STORAGE_BUCKET, s.path)
+        url = sc.url(STORAGE_BUCKET, s.path)
+        print url
+        if ob and ob.data:
+            tmp = ob.data
+
+    if STORAGE_SERVICE == 'gs':
+        src_uri = boto.storage_uri(s.bucket + '/' + s.path, 'gs')
+        src_key = src_uri.get_key()
+        tmp = tempfile.TemporaryFile()
+        src_key.get_file(tmp)
+        tmp.seek(0)
     
     if tmp:
         return cache_response(tmp, s.mime)
@@ -217,14 +239,25 @@ def thumbnail(request,key=None):
     if request.META.has_key('HTTP_IF_MODIFIED_SINCE'):
         return HttpResponseNotModified()
     s = get_object_or_404(Storage,pk=key)
-    read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
-    #image_data = read_gs(read_path)
-    src_uri = boto.storage_uri(s.bucket + '/' + s.path, 'gs')
-    src_key = src_uri.get_key()
-    tmp = tempfile.TemporaryFile()
-    src_key.get_file(tmp)
-    tmp.seek(0)
-    image_data = tmp
+    image_data = None
+
+    if STORAGE_SERVICE == 'sina':
+        import sae.storage
+        sc = sae.storage.Client()
+        ob = sc.get(STORAGE_BUCKET, s.path)
+        if ob and ob.data:
+            image_data = ob.data
+
+    if STORAGE_SERVICE == 'gs':
+        read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
+        #image_data = read_gs(read_path)
+        src_uri = boto.storage_uri(s.bucket + '/' + s.path, 'gs')
+        src_key = src_uri.get_key()
+        tmp = tempfile.TemporaryFile()
+        src_key.get_file(tmp)
+        tmp.seek(0)
+        image_data = tmp
+        image_data = tmp.read()
     
     if image_data:
         # MIN_SIZE = 100
@@ -252,9 +285,9 @@ def thumbnail(request,key=None):
         #     bottom_y = bottom_y + top_y
         # new_image = images.crop(new_image, left_x, top_y, right_x, bottom_y, output_encoding=images.PNG)
         #return cache_response(image_data, s.mime)
-        import Image,ImageOps
+        from PIL import Image,ImageOps
         import StringIO
-        img = Image.open(StringIO.StringIO(tmp.read()))
+        img = Image.open(StringIO.StringIO(image_data))
         #region = img.resize((100, 100),Image.ANTIALIAS)
         region = ImageOps.fit(img,(100, 100),Image.ANTIALIAS)
         response = HttpResponse(mimetype="image/png")
