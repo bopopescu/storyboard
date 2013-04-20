@@ -28,7 +28,7 @@ from models import *
 from forms import *
 
 # from google.appengine.api import files
-from config import GOOGLE_STORAGE,BUCKET,FOLDER
+from config import STORAGE_SERVICE,STORAGE_BUCKET,STORAGE_FOLDER
 
 # try:
 #   files.gs
@@ -103,14 +103,14 @@ def settings(request):
             # logging.info(type(request.FILES['img']))
             if request.FILES.has_key('img'):
                 file_name = "uploads/ohbug/avatar/normal/%s.png" % request.user.username
-                file_path = '/%s/%s/%s' % (GOOGLE_STORAGE,BUCKET,file_name)
+                file_path = '/%s/%s/%s' % (STORAGE_SERVICE,STORAGE_BUCKET,file_name)
                 #logging.info(file_path)
                 #logging.info(dir(request.FILES['img']))
                 #logging.info(request.FILES['img'].name)
             
                 content_type = request.FILES['img'].content_type or 'text/plain'
                 file_data = request.FILES['img'].read()
-                write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
+                write_path = files.gs.create(file_path, acl='STORAGE_BUCKET-owner-full-control',mime_type=content_type)
                 with files.open(write_path, 'a') as fp:
                     fp.write(file_data)
                 files.finalize(write_path)
@@ -143,24 +143,24 @@ def avatar(request,username=None):
         file_name = "uploads/ohbug/avatar/normal/%s.png" % username
     else:
         file_name = "uploads/ohbug/avatar/normal/%s.png" % request.user.username
-    read_path = '/%s/%s/%s' % (GOOGLE_STORAGE,BUCKET,file_name)
+    read_path = '/%s/%s/%s' % (STORAGE_SERVICE,STORAGE_BUCKET,file_name)
     
     image_data = read_gs(read_path)
     
     if not image_data:
         file_name = "uploads/ohbug/avatar/normal/default.png"
-        read_path = '/%s/%s/%s' % (GOOGLE_STORAGE,BUCKET,file_name)
+        read_path = '/%s/%s/%s' % (STORAGE_SERVICE,STORAGE_BUCKET,file_name)
     	image_data = read_gs(read_path)
     	
     return HttpResponse(image_data, mimetype="image/png")
     
 @login_required
 def custom_style(request):
-    return render_to_response('about.html',{},context_instance=RequestContext(request))
+    return render_to_response('home/about.html',{},context_instance=RequestContext(request))
 
 @login_required    
 def logs(request):
-    return render_to_response('about.html',{},context_instance=RequestContext(request))
+    return render_to_response('home/about.html',{},context_instance=RequestContext(request))
 
 def member(request,username=''):
     #u = User.objects.get(username__exact=username)
