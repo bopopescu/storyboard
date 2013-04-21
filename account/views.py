@@ -26,6 +26,7 @@ from django.shortcuts import get_object_or_404
 
 from models import *
 from forms import *
+from storage.models import *
 
 # from google.appengine.api import files
 from config import STORAGE_SERVICE,STORAGE_BUCKET,STORAGE_FOLDER
@@ -165,4 +166,5 @@ def logs(request):
 def member(request,username=''):
     #u = User.objects.get(username__exact=username)
     u = get_object_or_404(User,username__exact=username)
-    return render_to_response('account/member.html',{'member':u},context_instance=RequestContext(request))
+    query = Storage.objects.all().order_by('-updated').filter(author=u,kind='image')[:5]
+    return render_to_response('account/member.html',{'photos':query,'member':u},context_instance=RequestContext(request))

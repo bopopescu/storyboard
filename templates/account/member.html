@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% load i18n %}
 {% block body %}
 <div class="main">
 	<div class="first vcard">
@@ -44,7 +45,7 @@
     {{member.profile.description}}
   </div>
   {% endif %}
-  
+
   {% comment %}
   {% if member.profile.location %}
   <div class="modal fade hide" id="myModal">
@@ -104,4 +105,14 @@
 	{% endif %}
 	{% endcomment %}
 </div>
+  <div class="main photos">
+  <a href="/photo">{% trans "Latest Photos" %}</a>
+  <ul>
+    {% for photo in photos %}
+    <li>
+      <a href="/photo/{{photo.key}}" title="{{photo.name}}"><img src="/photo/thumb/{{photo.key}}.png" width="100" height="100" alt="{{photo.name}}"/></a>
+    </li>
+    {% endfor %}
+  </ul>
+  </div>
 {% endblock %}

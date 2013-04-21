@@ -31,8 +31,15 @@ from gfm import gfm
 from storage.models import *
 from board.models import *
 
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
+
+@cache_page(60 * 1)
 def index(request):
-    query = Storage.objects.all().order_by('-updated')[:5]
+    cache.set('my_key', 'hello, world!', 30)
+    logging.info(cache.get('my_key'))
+    print cache.get('my_key')
+    query = Storage.objects.all().order_by('-updated').filter(kind='image')[:5]
     threads = Thread.objects.all().order_by('-updated').filter(ref=None)[:5]
     #return HttpResponseRedirect('/r')
     return render_to_response('index.html',{'photos':query,'threads':threads},context_instance=RequestContext(request))

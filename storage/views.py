@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
 # config.set('Credentials', 'gs_secret_access_key', '')
 
 def photos(request):
-    query = Storage.objects.all().order_by('-updated')
+    query = Storage.objects.all().order_by('-updated').filter(kind='image')
     return render_to_response('storage/photos.html',{'photos':query},context_instance=RequestContext(request))
 
 @login_required
@@ -147,15 +147,17 @@ def upload(request):
                     #   logger = logging.getLogger('pyhttpclient')
                     # logger.info('file_data')
                     # logger.info(file_uri)
-                    from bae.api import bcs
-                    baebcs = bcs.BaeBCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
-                    #obj_path = TMPDIR+'/'+file_uri
-                    obj_name = u'/%s'%(file_uri)
-                    baebcs.put_object(STORAGE_BUCKET, obj_name.encode('utf8'), file_data)
-                    #baebcs.put_file(STORAGE_BUCKET, obj_name.encode('utf8'), obj_path.encode('utf8'))
-                    baebcs.make_public(STORAGE_BUCKET, obj_name.encode('utf8'))
+                    # BAE API
+                    # from bae.api import bcs
+                    # baebcs = bcs.BaeBCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
+                    # #obj_path = TMPDIR+'/'+file_uri
+                    # obj_name = u'/%s'%(file_uri)
+                    # baebcs.put_object(STORAGE_BUCKET, obj_name.encode('utf8'), file_data)
+                    # #baebcs.put_file(STORAGE_BUCKET, obj_name.encode('utf8'), obj_path.encode('utf8'))
+                    # baebcs.make_public(STORAGE_BUCKET, obj_name.encode('utf8'))
 
-                    # import pybcs
+                    # BCS API
+                    import pybcs
                     # # TMPDIR = '/tmp'
                     # # try:
                     # #     from bae.core import const
@@ -165,13 +167,13 @@ def upload(request):
                     # # output = open(TMPDIR+'/'+file_uri, 'wb')
                     # # output.write(file_data)
                     # # output.close()
-                    # bcs = pybcs.BCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
-                    # bucket = bcs.bucket(STORAGE_BUCKET)
-                    # obj_name = u'/%s'%(file_uri)
-                    # obj = bucket.object(obj_name.encode('utf8'))
-                    # obj.put(file_data)
-                    # obj.make_public()
-                    # #obj.put_file(TMPDIR+'/'+file_uri)
+                    bcs = pybcs.BCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
+                    bucket = bcs.bucket(STORAGE_BUCKET)
+                    obj_name = u'/%s'%(file_uri)
+                    obj = bucket.object(obj_name.encode('utf8'))
+                    obj.put(file_data)
+                    obj.make_public()
+                    #obj.put_file(TMPDIR+'/'+file_uri)
                     file_name = file_uri
 
                 # Google Storage
@@ -202,6 +204,7 @@ def upload(request):
                 s.size = len(file_data)
                 s.md5 = hashlib.md5(file_data).hexdigest()
                 s.name = name
+                s.kind = 'image'
                 s.author = request.user
                 s.save()
                 return HttpResponseRedirect('/photo/%s'%s.key)
