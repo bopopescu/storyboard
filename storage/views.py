@@ -26,7 +26,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils import simplejson
 
 # from google.appengine.api import files
-from config import STORAGE_SERVICE,STORAGE_BUCKET,STORAGE_FOLDER
+from config import STORAGE_SERVICE,STORAGE_BUCKET,STORAGE_FOLDER,STORAGE_ACCESS_KEY,STORAGE_SECRET_ACCESS_KEY
 
 from models import *
 from forms import *
@@ -69,7 +69,7 @@ def ajax_upload(request):
                 return
             if file_ext_pos<=0 and file_ext_pos>=file_name_len:
                 return
-            file_ext = name[file_ext_pos-file_name_len:]        		
+            file_ext = name[file_ext_pos-file_name_len:]                
             file_name = 'uploads/ohbug/photo/%s%s' % (now.strftime('%Y-%m/%d-%H%M%S-%f'),file_ext)
             file_path = '/%s/%s/%s' % (STORAGE_SERVICE,STORAGE_BUCKET,file_name)
             #logging.info(file_path)
@@ -119,7 +119,7 @@ def upload(request):
                 if file_ext_pos<=0 and file_ext_pos>=file_name_len:
                     return
                 file_ext = name[file_ext_pos-file_name_len:].lower()
-                file_uri  = '%s%s' % (now.strftime('%Y-%m-%d-%H%M%S-%f'),file_ext)    		
+                file_uri  = '%s%s' % (now.strftime('%Y-%m-%d-%H%M%S-%f'),file_ext)          
                 file_name = 'uploads/ohbug/photo/%s%s' % (now.strftime('%Y-%m/%d-%H%M%S-%f'),file_ext)
                 file_path = '/%s/%s/%s' % (STORAGE_SERVICE,STORAGE_BUCKET,file_name)
 
@@ -128,6 +128,26 @@ def upload(request):
                     s = sae.storage.Client()
                     ob = sae.storage.Object(file_data,expires='', content_type=content_type, content_encoding='gzip')
                     s.put(STORAGE_BUCKET, file_uri , ob)
+                    file_name = file_uri
+
+                if STORAGE_SERVICE == 'baidu':
+                    import pybcs
+                    # TMPDIR = '/tmp'
+                    # try:
+                    #     from bae.core import const
+                    #     TMPDIR = const.APP_TMPDIR
+                    # except Exception, e:
+                    #     pass
+                    # output = open(TMPDIR+'/'+file_uri, 'wb')
+                    # output.write(file_data)
+                    # output.close()
+                    bcs = pybcs.BCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
+                    bucket = bcs.bucket(STORAGE_BUCKET)
+                    obj_name = u'/%s'%(file_uri)
+                    obj = bucket.object(obj_name.encode('utf8'))
+                    obj.put(file_data)
+                    obj.make_public()
+                    #obj.put_file(TMPDIR+'/'+file_uri)
                     file_name = file_uri
 
                 # Google Storage
@@ -144,7 +164,7 @@ def upload(request):
                     dst_key.content_type = content_type
                     dst_key.set_contents_from_file(tmp)
                     #logger.info('hello')
-            		
+                    
                     # write_path = files.gs.create(file_path, acl='bucket-owner-full-control',mime_type=content_type)
                     # with files.open(write_path, 'a') as fp:
                     #     fp.write(file_data)
@@ -171,10 +191,13 @@ def view(request,key=None):
     # file_ext_pos = name.rfind('.')
     # file_name_len = len(name)
     # file_ext = name[file_ext_pos-file_name_len:]
-    HTTP_HOST = request.META['HTTP_HOST'] 
+    HTTP_HOST = request.META['HTTP_HOST']
+    url = 'http://%s/photo/raw/%s.%s' % (HTTP_HOST,s.key,s.name)
+    if STORAGE_SERVICE == 'baidu':
+        url = 'http://bcs.duapp.com/%s/%s'%(STORAGE_BUCKET,s.path)
     image = {
         'origin': s,
-        'url': 'http://%s/photo/raw/%s.%s' % (HTTP_HOST,s.key,s.name)
+        'url': url
     }
     return render_to_response('storage/photo.html',{'image':image},context_instance=RequestContext(request))
     
@@ -223,6 +246,14 @@ def raw(request,key=None):
         if ob and ob.data:
             tmp = ob.data
 
+    if STORAGE_SERVICE == 'baidu':
+        import pybcs
+        bcs = pybcs.BCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
+        bucket = bcs.bucket(STORAGE_BUCKET)
+        obj_name = u'/%s'%(s.path)
+        obj = bucket.object(obj_name.encode('utf8'))
+        tmp = obj.get()['body']
+
     if STORAGE_SERVICE == 'gs':
         src_uri = boto.storage_uri(s.bucket + '/' + s.path, 'gs')
         src_key = src_uri.get_key()
@@ -247,6 +278,14 @@ def thumbnail(request,key=None):
         ob = sc.get(STORAGE_BUCKET, s.path)
         if ob and ob.data:
             image_data = ob.data
+
+    if STORAGE_SERVICE == 'baidu':
+        import pybcs
+        bcs = pybcs.BCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
+        bucket = bcs.bucket(STORAGE_BUCKET)
+        obj_name = u'/%s'%(s.path)
+        obj = bucket.object(obj_name.encode('utf8'))
+        image_data = obj.get()['body']
 
     if STORAGE_SERVICE == 'gs':
         read_path =  '/%s/%s/%s'% (s.storage, s.bucket, s.path)
