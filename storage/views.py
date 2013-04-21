@@ -131,7 +131,6 @@ def upload(request):
                     file_name = file_uri
 
                 if STORAGE_SERVICE == 'baidu':
-                    import pybcs
                     # TMPDIR = '/tmp'
                     # try:
                     #     from bae.core import const
@@ -141,13 +140,38 @@ def upload(request):
                     # output = open(TMPDIR+'/'+file_uri, 'wb')
                     # output.write(file_data)
                     # output.close()
-                    bcs = pybcs.BCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
-                    bucket = bcs.bucket(STORAGE_BUCKET)
+                    # try:
+                    #   from bae.api import logging as logger
+                    # except:
+                    #   import logging
+                    #   logger = logging.getLogger('pyhttpclient')
+                    # logger.info('file_data')
+                    # logger.info(file_uri)
+                    from bae.api import bcs
+                    baebcs = bcs.BaeBCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
+                    #obj_path = TMPDIR+'/'+file_uri
                     obj_name = u'/%s'%(file_uri)
-                    obj = bucket.object(obj_name.encode('utf8'))
-                    obj.put(file_data)
-                    obj.make_public()
-                    #obj.put_file(TMPDIR+'/'+file_uri)
+                    baebcs.put_object(STORAGE_BUCKET, obj_name.encode('utf8'), file_data)
+                    #baebcs.put_file(STORAGE_BUCKET, obj_name.encode('utf8'), obj_path.encode('utf8'))
+                    baebcs.make_public(STORAGE_BUCKET, obj_name.encode('utf8'))
+
+                    # import pybcs
+                    # # TMPDIR = '/tmp'
+                    # # try:
+                    # #     from bae.core import const
+                    # #     TMPDIR = const.APP_TMPDIR
+                    # # except Exception, e:
+                    # #     pass
+                    # # output = open(TMPDIR+'/'+file_uri, 'wb')
+                    # # output.write(file_data)
+                    # # output.close()
+                    # bcs = pybcs.BCS('http://bcs.duapp.com/', STORAGE_ACCESS_KEY, STORAGE_SECRET_ACCESS_KEY)
+                    # bucket = bcs.bucket(STORAGE_BUCKET)
+                    # obj_name = u'/%s'%(file_uri)
+                    # obj = bucket.object(obj_name.encode('utf8'))
+                    # obj.put(file_data)
+                    # obj.make_public()
+                    # #obj.put_file(TMPDIR+'/'+file_uri)
                     file_name = file_uri
 
                 # Google Storage
