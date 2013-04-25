@@ -16,8 +16,9 @@ import datetime
 
 class EntryForm(ModelForm):
     #years_to_display = range(datetime.datetime.now().year-100,datetime.datetime.now().year+1)
-    text = forms.CharField(widget=forms.Textarea(attrs={'class':'input-xxlarge','rows':10,'cols':''}))
-    tags = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'input-xxlarge'}),help_text='split by ,')
+    title = forms.CharField(label='',widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder': 'title'}))
+    text = forms.CharField(label='',widget=forms.Textarea(attrs={'class':'input-xxlarge','rows':10,'cols':'','placeholder': 'text'}))
+    tags = forms.CharField(label='',required=False,widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder': 'tags'}),help_text='split by ,')
     Format_Choices = (
             ('2', 'markdown'),
         )

@@ -175,6 +175,15 @@ ul.thread-list .post-title a{
 ul.thread-list .avatar,.thread-content .avatar{
 	margin: 5px;
 	float: left;
+  width: 48px; 
+  height: 48px; 
+  display: block;
+}
+
+ul.thread-list .thread-comment .avatar{
+  width: 32px; 
+  height: 32px; 
+  display: block;
 }
 
 /*

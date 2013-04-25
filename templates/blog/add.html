@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% load bootstrap %}
 <script type="text/javascript">window.__admin_media_prefix__ = "/static/media/";</script> 
 <script type="text/javascript" src="/admin/jsi18n/"></script>
 <script type="text/javascript" src="/static/media/js/core.js"></script>
@@ -22,9 +23,7 @@
 <div class="main">
 <form action="" method="POST">
 	{% csrf_token %}
-<table>
-{{ form.as_table }}
-</table>
+  {{ form|bootstrap }}
 <div class="form-actions">
 	<button type="submit" class="btn btn-primary">Save</button>
 	<a class="btn" data-toggle="modal" href="#preview" >Preview Mode</a>
