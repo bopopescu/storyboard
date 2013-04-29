@@ -62,7 +62,7 @@ def page(request,minisite=None):
     else:
         return HttpResponseRedirect('/')
 
-def edit_page(request,minisitepath=None,pagepath=None):
+def edit_page(request,minisitepath=None,pagepath=''):
     if request.user.is_superuser:
         minisite = get_object_or_404(Minisite,slug=minisitepath)
         page = get_object_or_404(Page,slug=pagepath,minisite=minisite)
@@ -74,13 +74,15 @@ def edit_page(request,minisitepath=None,pagepath=None):
             form = PageForm(data=request.POST or None, instance = page)
             if form.is_valid():
                 obj = form.save(commit=False)
+                #if obj.slug == '':
+                #    obj.slug = 'index.html'
                 # obj.author = request.user
                 # obj.minisite = minisite
                 obj.save()
                 return HttpResponseRedirect('/minisite/'+minisite.slug)
         else:
             form = PageForm(instance = page, initial = {'minisite': minisite })
-        return render_to_response('home/add_page.html',{'form': form},context_instance=RequestContext(request))
+        return render_to_response('home/add_page.html',{'form': form,'minisite':minisite},context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
     
@@ -95,13 +97,15 @@ def add_page(request,minisite=None):
             form = PageForm(data=request.POST)
             if form.is_valid():
                 obj = form.save(commit=False)
+                #if obj.slug == '':
+                #    obj.slug = 'index.html'
                 obj.author = request.user
                 obj.minisite = minisite
                 obj.save()
                 return HttpResponseRedirect('/minisite/'+minisite.slug)
         else:
             form = PageForm()
-        return render_to_response('home/add_page.html',{'form':form},context_instance=RequestContext(request))
+        return render_to_response('home/add_page.html',{'form':form,'minisite':minisite},context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
       

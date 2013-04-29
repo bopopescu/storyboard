@@ -1,11 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
+<ul class="breadcrumb">
+  <li><a href="/">Home</a> <span class="divider">/</span></li>
+  <li><a href="/minisite">Minisite</a> <span class="divider">/</span></li>
+  <li><a href="/minisite/{{minisite.slug}}">{{minisite.name}}</a></li>
+  <li class="active" style="float:right;"><a href="/minisite/add/{{minisite.slug}}">Add Page</a></li>
+</ul>
 <div class="main">
   <header>	
   	site list
   </header>
   <div>
-    <div><a href="/minisite/add/{{minisite.slug}}">Add Page</a></div>
     <ul>
     {% for page in pages %}
       <li>

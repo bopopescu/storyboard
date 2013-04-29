@@ -14,13 +14,15 @@ from django.forms.extras.widgets import SelectDateWidget
 from models import *
 
 class MinisiteForm(ModelForm):
+    name  = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'Site Name'}))
+    slug  = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'demo'}))
     class Meta:
         model = Minisite
         fields = ['name','slug']
 
 class PageForm(ModelForm):
-    name  = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'input-xxlarge'}))
-    slug  = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'input-xxlarge'}))
+    name  = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'Page Title'}))
+    slug  = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'index.html'}))
     text = forms.CharField(required=False,widget=forms.Textarea(attrs={'class':'input-xxlarge','rows':10,'cols':''}))
     Format_Choices = (
             ('2', 'markdown'),
