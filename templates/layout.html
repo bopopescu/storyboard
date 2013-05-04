@@ -20,7 +20,7 @@
 	{% endblock %}
 </head>
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
-	<div class="navbar navbar-fixed-top">
+	<div class="navbar navbar-fixed-top navbar-inverse">
 	  <div class="navbar-inner">
 	    <div class="container">
 				<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
@@ -37,7 +37,7 @@
 				<div class="nav-collapse">
 				  <!-- .nav, .navbar-search, .navbar-form, etc -->
 					<ul class="nav">
-					  <li class="active"><a href="/">{% trans "Home" %}</a></li>
+						<li class="active"><a href="/">{% trans "Home" %}</a></li>
 						<li><a href="/r">{% trans "Board" %}</a></li>
 						<li><a href="/blog">{% trans "Blog" %}</a></li>
 						<li><a href="/photo">{% trans "Photo" %}</a></li>
@@ -184,6 +184,17 @@
 	<script src="/static/jquery.js"></script>
 	<script src="/static/bootstrap/js/bootstrap.js"></script>
 	<script>
+	(function(){
+		var path = location.pathname.replace(/\//g,'');
+		$('.navbar-fixed-top .nav li a').each(function(){
+			var p = this.pathname.replace(/\//g,'');
+			if(p==path){
+				$(this).parent().addClass('active');
+			}else{
+				$(this).parent().removeClass('active');
+			}
+		});
+	})();
 	$('.dropdown-toggle').dropdown();
 	$('.stamp').tooltip();
 	$('.mention').tooltip();
