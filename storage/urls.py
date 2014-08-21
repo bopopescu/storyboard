@@ -7,7 +7,7 @@ Created by Darcy Liu on 2012-04-02.
 Copyright (c) 2012 Close To U. All rights reserved.
 """
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 urlpatterns = patterns('storage.views',
             (r'^$','photos'),
             (r'^ajax_upload$','ajax_upload'),

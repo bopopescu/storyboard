@@ -7,7 +7,7 @@ Created by Darcy Liu on 2012-03-03.
 Copyright (c) 2012 Close To U. All rights reserved.
 """
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.contrib.auth import views as auth_views
 urlpatterns = patterns('account.views',
             (r'^$','index'),

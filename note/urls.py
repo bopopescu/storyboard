@@ -7,7 +7,7 @@ Created by Darcy Liu on 2012-03-03.
 Copyright (c) 2012 Close To U. All rights reserved.
 """
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 urlpatterns = patterns('note.views',
             (r'^$','index'),
             (r'^add$','add'),

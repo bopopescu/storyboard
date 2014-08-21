@@ -7,7 +7,7 @@ Created by Darcy Liu on 2012-03-01.
 Copyright (c) 2012 Close To U. All rights reserved.
 """
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from views import LatestEntries
 
 urlpatterns = patterns('board.views',
